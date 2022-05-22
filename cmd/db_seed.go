@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"allaboutapps.dev/aw/go-starter/internal/config"
-	"allaboutapps.dev/aw/go-starter/internal/data"
-	dbutil "allaboutapps.dev/aw/go-starter/internal/util/db"
+	"stamp/internal/config"
+	"stamp/internal/data"
+	dbutil "stamp/internal/util/db"
 	"github.com/spf13/cobra"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )

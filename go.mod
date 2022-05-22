@@ -1,4 +1,4 @@
-module allaboutapps.dev/aw/go-starter
+module stamp
 
 go 1.17
 

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"allaboutapps.dev/aw/go-starter/internal/types"
+	"stamp/internal/types"
 	"github.com/go-openapi/swag"
 )
 

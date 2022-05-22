@@ -8,9 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"allaboutapps.dev/aw/go-starter/internal/config"
-	"allaboutapps.dev/aw/go-starter/internal/mailer/transport"
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/config"
+	"stamp/internal/mailer/transport"
+	"stamp/internal/util"
 	"github.com/jordan-wright/email"
 	"github.com/rs/zerolog/log"
 )

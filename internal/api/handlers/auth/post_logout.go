@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 
-	"allaboutapps.dev/aw/go-starter/internal/api"
-	"allaboutapps.dev/aw/go-starter/internal/api/auth"
-	"allaboutapps.dev/aw/go-starter/internal/models"
-	"allaboutapps.dev/aw/go-starter/internal/types"
-	"allaboutapps.dev/aw/go-starter/internal/util"
-	"allaboutapps.dev/aw/go-starter/internal/util/db"
+	"stamp/internal/api"
+	"stamp/internal/api/auth"
+	"stamp/internal/models"
+	"stamp/internal/types"
+	"stamp/internal/util"
+	"stamp/internal/util/db"
 	"github.com/labstack/echo/v4"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )

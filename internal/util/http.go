@@ -8,8 +8,8 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"allaboutapps.dev/aw/go-starter/internal/api/httperrors"
-	"allaboutapps.dev/aw/go-starter/internal/types"
+	"stamp/internal/api/httperrors"
+	"stamp/internal/types"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"

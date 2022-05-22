@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 
-	"allaboutapps.dev/aw/go-starter/internal/config"
-	"allaboutapps.dev/aw/go-starter/internal/i18n"
-	"allaboutapps.dev/aw/go-starter/internal/mailer"
-	"allaboutapps.dev/aw/go-starter/internal/mailer/transport"
-	"allaboutapps.dev/aw/go-starter/internal/push"
-	"allaboutapps.dev/aw/go-starter/internal/push/provider"
+	"stamp/internal/config"
+	"stamp/internal/i18n"
+	"stamp/internal/mailer"
+	"stamp/internal/mailer/transport"
+	"stamp/internal/push"
+	"stamp/internal/push/provider"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 

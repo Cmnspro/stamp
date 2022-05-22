@@ -12,7 +12,7 @@ import (
 	"strings"
 	"text/template"
 
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/util"
 	"github.com/go-openapi/swag"
 	"github.com/rogpeppe/go-internal/modfile"
 )

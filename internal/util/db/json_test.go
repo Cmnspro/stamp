@@ -3,9 +3,9 @@ package db_test
 import (
 	"testing"
 
-	"allaboutapps.dev/aw/go-starter/internal/models"
-	"allaboutapps.dev/aw/go-starter/internal/test"
-	"allaboutapps.dev/aw/go-starter/internal/util/db"
+	"stamp/internal/models"
+	"stamp/internal/test"
+	"stamp/internal/util/db"
 	"github.com/stretchr/testify/require"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"

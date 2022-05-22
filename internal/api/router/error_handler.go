@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"allaboutapps.dev/aw/go-starter/internal/api/httperrors"
-	"allaboutapps.dev/aw/go-starter/internal/types"
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/api/httperrors"
+	"stamp/internal/types"
+	"stamp/internal/util"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
 )

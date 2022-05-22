@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"allaboutapps.dev/aw/go-starter/internal/mailer/transport"
-	"allaboutapps.dev/aw/go-starter/internal/push/provider"
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/mailer/transport"
+	"stamp/internal/push/provider"
+	"stamp/internal/util"
 	"github.com/rs/zerolog"
 	"golang.org/x/text/language"
 )

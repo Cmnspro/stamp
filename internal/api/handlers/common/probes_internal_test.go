@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
 )
 

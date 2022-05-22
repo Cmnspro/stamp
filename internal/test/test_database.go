@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	pUtil "allaboutapps.dev/aw/go-starter/internal/util"
-	dbutil "allaboutapps.dev/aw/go-starter/internal/util/db"
+	pUtil "stamp/internal/util"
+	dbutil "stamp/internal/util/db"
 	"github.com/allaboutapps/integresql-client-go"
 	"github.com/allaboutapps/integresql-client-go/pkg/util"
 	"github.com/pkg/errors"

@@ -8,8 +8,8 @@ import (
 	"sync"
 	"testing"
 
-	"allaboutapps.dev/aw/go-starter/internal/test"
-	pUtil "allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/test"
+	pUtil "stamp/internal/util"
 	"github.com/stretchr/testify/require"
 )
 

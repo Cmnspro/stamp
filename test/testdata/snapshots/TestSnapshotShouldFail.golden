@@ -1,5 +1,5 @@
 (struct { A string; B int; C bool; D *string }) {
-  A: (string) (len=3) "foo",
+  A: (string) (len=2) "fo",
   B: (int) 1,
   C: (bool) true,
   D: (*string)((len=3) "bar")

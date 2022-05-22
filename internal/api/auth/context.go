@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 
-	"allaboutapps.dev/aw/go-starter/internal/models"
-	"allaboutapps.dev/aw/go-starter/internal/util"
+	"stamp/internal/models"
+	"stamp/internal/util"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
 )

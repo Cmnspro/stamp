@@ -425,7 +425,7 @@
 
 ```bash
 app -v
-allaboutapps.dev/aw/go-starter @ 19c4cdd0da151df432cd5ab33c35c8987b594cac (2021-03-11T15:42:27+00:00)
+stamp @ 19c4cdd0da151df432cd5ab33c35c8987b594cac (2021-03-11T15:42:27+00:00)
 ```
 
 ### Changed

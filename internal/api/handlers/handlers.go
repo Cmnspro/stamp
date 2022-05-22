@@ -2,10 +2,10 @@
 package handlers
 
 import (
-	"allaboutapps.dev/aw/go-starter/internal/api"
-	"allaboutapps.dev/aw/go-starter/internal/api/handlers/auth"
-	"allaboutapps.dev/aw/go-starter/internal/api/handlers/common"
-	"allaboutapps.dev/aw/go-starter/internal/api/handlers/push"
+	"stamp/internal/api"
+	"stamp/internal/api/handlers/auth"
+	"stamp/internal/api/handlers/common"
+	"stamp/internal/api/handlers/push"
 	"github.com/labstack/echo/v4"
 )
 

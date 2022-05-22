@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"allaboutapps.dev/aw/go-starter/internal/api"
-	"allaboutapps.dev/aw/go-starter/internal/test"
+	"stamp/internal/api"
+	"stamp/internal/test"
 	"github.com/stretchr/testify/require"
 )
 

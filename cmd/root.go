@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"allaboutapps.dev/aw/go-starter/internal/config"
+	"stamp/internal/config"
 	"github.com/spf13/cobra"
 )
 
