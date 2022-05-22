@@ -8,9 +8,9 @@ import (
 	"regexp"
 	"strings"
 
-	"stamp/internal/util"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/pmezard/go-difflib/difflib"
+	"stamp/internal/util"
 )
 
 var (

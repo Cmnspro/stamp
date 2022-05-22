@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"stamp/internal/config"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+	"stamp/internal/config"
 )
 
 // envCmd represents the server command

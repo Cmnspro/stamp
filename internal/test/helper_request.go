@@ -9,10 +9,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"stamp/internal/api"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/labstack/echo/v4"
+	"stamp/internal/api"
 )
 
 type GenericPayload map[string]interface{}

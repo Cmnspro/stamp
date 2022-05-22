@@ -8,11 +8,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/jordan-wright/email"
+	"github.com/rs/zerolog/log"
 	"stamp/internal/config"
 	"stamp/internal/mailer/transport"
 	"stamp/internal/util"
-	"github.com/jordan-wright/email"
-	"github.com/rs/zerolog/log"
 )
 
 var (

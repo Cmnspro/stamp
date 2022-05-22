@@ -3,11 +3,11 @@ package db_test
 import (
 	"testing"
 
+	"github.com/volatiletech/sqlboiler/v4/queries"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"stamp/internal/models"
 	"stamp/internal/test"
 	"stamp/internal/util/db"
-	"github.com/volatiletech/sqlboiler/v4/queries"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 func TestILike(t *testing.T) {

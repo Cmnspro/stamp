@@ -3,8 +3,8 @@ package util_test
 import (
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util"
 )
 
 func TestMergeStringMap(t *testing.T) {

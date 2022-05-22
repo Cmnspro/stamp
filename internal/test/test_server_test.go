@@ -6,16 +6,16 @@ import (
 	"strings"
 	"testing"
 
-	"stamp/internal/api"
-	"stamp/internal/config"
-	"stamp/internal/test"
-	"stamp/internal/util"
-	pUtil "stamp/internal/util"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/api"
+	"stamp/internal/config"
+	"stamp/internal/test"
+	"stamp/internal/util"
+	pUtil "stamp/internal/util"
 )
 
 type TestRequestPayload struct {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"stamp/internal/config"
 	"github.com/spf13/cobra"
+	"stamp/internal/config"
 )
 
 // rootCmd represents the base command when called without any subcommands

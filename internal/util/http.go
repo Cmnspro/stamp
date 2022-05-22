@@ -8,14 +8,14 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"stamp/internal/api/httperrors"
-	"stamp/internal/types"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
+	"stamp/internal/api/httperrors"
+	"stamp/internal/types"
 )
 
 const (

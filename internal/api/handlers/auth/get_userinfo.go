@@ -5,13 +5,13 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+	"github.com/labstack/echo/v4"
 	"stamp/internal/api"
 	"stamp/internal/api/auth"
 	"stamp/internal/types"
 	"stamp/internal/util"
-	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
-	"github.com/labstack/echo/v4"
 )
 
 func GetUserInfoRoute(s *api.Server) *echo.Route {

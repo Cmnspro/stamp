@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/config"
 	"stamp/internal/data"
 	dbutil "stamp/internal/util/db"
-	"github.com/spf13/cobra"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 // seedCmd represents the seed command

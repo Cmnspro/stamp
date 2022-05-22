@@ -3,8 +3,8 @@ package util_test
 import (
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/util"
 )
 
 func TestRunningInTest(t *testing.T) {

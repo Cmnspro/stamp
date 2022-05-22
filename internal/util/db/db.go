@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"stamp/internal/util"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"stamp/internal/util"
 )
 
 type TxFn func(boil.ContextExecutor) error

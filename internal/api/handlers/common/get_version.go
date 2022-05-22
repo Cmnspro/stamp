@@ -3,9 +3,9 @@ package common
 import (
 	"net/http"
 
+	"github.com/labstack/echo/v4"
 	"stamp/internal/api"
 	"stamp/internal/config"
-	"github.com/labstack/echo/v4"
 )
 
 func GetVersionRoute(s *api.Server) *echo.Route {

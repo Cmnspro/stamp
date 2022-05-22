@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"stamp/internal/api"
-	"stamp/internal/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/api"
+	"stamp/internal/test"
 )
 
 func TestGetVersion(t *testing.T) {

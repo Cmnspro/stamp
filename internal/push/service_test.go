@@ -5,13 +5,13 @@ import (
 	"database/sql"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/models"
 	"stamp/internal/push"
 	"stamp/internal/push/provider"
 	"stamp/internal/test"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func TestSendMessageSuccess(t *testing.T) {

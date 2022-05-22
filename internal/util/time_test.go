@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/util"
 )
 
 func TestStartOfMonth(t *testing.T) {

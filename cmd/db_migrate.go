@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"stamp/internal/config"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/spf13/cobra"
+	"stamp/internal/config"
 )
 
 var migrateCmd = &cobra.Command{

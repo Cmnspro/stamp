@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-openapi/swag"
+	"github.com/labstack/echo/v4"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/types"
 	"stamp/internal/util"
-	"github.com/go-openapi/swag"
-	"github.com/labstack/echo/v4"
 )
 
 var (

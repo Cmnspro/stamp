@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util"
 )
 
 func TestWaitTimeoutErr(t *testing.T) {

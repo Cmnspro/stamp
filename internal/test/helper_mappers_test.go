@@ -3,8 +3,8 @@ package test_test
 import (
 	"testing"
 
-	"stamp/internal/test"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/test"
 )
 
 func TestGetMapFromStruct(t *testing.T) {

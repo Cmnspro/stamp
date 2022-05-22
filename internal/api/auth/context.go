@@ -3,10 +3,10 @@ package auth
 import (
 	"context"
 
-	"stamp/internal/models"
-	"stamp/internal/util"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
+	"stamp/internal/models"
+	"stamp/internal/util"
 )
 
 // EnrichContextWithCredentials stores the provided credentials in the form of user and access token used for authentication

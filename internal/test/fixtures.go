@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"stamp/internal/models"
+
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
@@ -35,6 +36,7 @@ type FixtureMap struct {
 	UserDeactivatedRefreshToken1  *models.RefreshToken
 	User1PushToken                *models.PushToken
 	User1PushTokenAPN             *models.PushToken
+	Domain1                       *models.Domain
 }
 
 // Fixtures returns a function wrapping our fixtures, which tests are allowed to manipulate.
@@ -129,6 +131,11 @@ func Fixtures() FixtureMap {
 		Provider: models.ProviderTypeApn,
 	}
 
+	f.Domain1 = &models.Domain{
+		ID:     "73da474d-55eb-41e9-8ca6-6b5ceb0eba35",
+		Domain: "google.com",
+	}
+
 	return f
 }
 
@@ -152,5 +159,6 @@ func Inserts() []Insertable {
 		fixtures.UserDeactivatedRefreshToken1,
 		fixtures.User1PushToken,
 		fixtures.User1PushTokenAPN,
+		fixtures.Domain1,
 	}
 }

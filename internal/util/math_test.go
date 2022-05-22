@@ -4,8 +4,8 @@ import (
 	"math"
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util"
 )
 
 func TestMinAndMapInt(t *testing.T) {

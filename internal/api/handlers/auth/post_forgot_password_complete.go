@@ -5,6 +5,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt/conv"
+	"github.com/go-openapi/swag"
+	"github.com/labstack/echo/v4"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"stamp/internal/api"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/api/middleware"
@@ -13,13 +20,6 @@ import (
 	"stamp/internal/util"
 	"stamp/internal/util/db"
 	"stamp/internal/util/hashing"
-	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/strfmt/conv"
-	"github.com/go-openapi/swag"
-	"github.com/labstack/echo/v4"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 func PostForgotPasswordCompleteRoute(s *api.Server) *echo.Route {

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util"
 )
 
 func TestEnsureDeadline(t *testing.T) {

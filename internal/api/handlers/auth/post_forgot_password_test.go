@@ -6,17 +6,17 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/jordan-wright/email"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/mailer"
 	"stamp/internal/mailer/transport"
 	"stamp/internal/models"
 	"stamp/internal/test"
-	"github.com/jordan-wright/email"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func getLastSentMail(t *testing.T, m *mailer.Mailer) *email.Email {

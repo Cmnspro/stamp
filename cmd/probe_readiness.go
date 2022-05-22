@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"fmt"
 
-	"stamp/internal/api/handlers/common"
-	"stamp/internal/config"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+	"stamp/internal/api/handlers/common"
+	"stamp/internal/config"
 )
 
 // readinessCmd represents the server command

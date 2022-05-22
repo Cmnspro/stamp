@@ -5,9 +5,9 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/util"
 )
 
 func TestGenerateRandom(t *testing.T) {

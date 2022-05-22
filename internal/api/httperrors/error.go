@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"stamp/internal/types"
 	"github.com/go-openapi/swag"
+	"stamp/internal/types"
 )
 
 const (

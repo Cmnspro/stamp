@@ -3,9 +3,9 @@ package util_test
 import (
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util"
 )
 
 func TestLogLevelFromString(t *testing.T) {

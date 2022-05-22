@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"stamp/internal/api"
 	"stamp/internal/config"
 	"stamp/internal/test"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestMailerSendPasswordReset(t *testing.T) {

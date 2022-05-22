@@ -7,11 +7,13 @@ import (
 	"fmt"
 
 	"stamp/internal/config"
+	"stamp/internal/data/local"
 	"stamp/internal/i18n"
 	"stamp/internal/mailer"
 	"stamp/internal/mailer/transport"
 	"stamp/internal/push"
 	"stamp/internal/push/provider"
+
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 
@@ -20,11 +22,12 @@ import (
 )
 
 type Router struct {
-	Routes     []*echo.Route
-	Root       *echo.Group
-	Management *echo.Group
-	APIV1Auth  *echo.Group
-	APIV1Push  *echo.Group
+	Routes      []*echo.Route
+	Root        *echo.Group
+	Management  *echo.Group
+	APIV1Auth   *echo.Group
+	APIV1Push   *echo.Group
+	APIV1Domain *echo.Group
 }
 
 type Server struct {
@@ -35,6 +38,7 @@ type Server struct {
 	Mailer *mailer.Mailer
 	Push   *push.Service
 	I18n   *i18n.Service
+	Local  *local.Service
 }
 
 func NewServer(config config.Server) *Server {
@@ -46,6 +50,7 @@ func NewServer(config config.Server) *Server {
 		Mailer: nil,
 		Push:   nil,
 		I18n:   nil,
+		Local:  nil,
 	}
 
 	return s
@@ -57,7 +62,8 @@ func (s *Server) Ready() bool {
 		s.Router != nil &&
 		s.Mailer != nil &&
 		s.Push != nil &&
-		s.I18n != nil
+		s.I18n != nil &&
+		s.Local != nil
 }
 
 func (s *Server) InitDB(ctx context.Context) error {
@@ -131,6 +137,12 @@ func (s *Server) InitI18n() error {
 	}
 
 	s.I18n = i18nService
+
+	return nil
+}
+
+func (s *Server) InitLocalService() error {
+	s.Local = local.NewService(s.DB)
 
 	return nil
 }

@@ -1,0 +1,5 @@
+(types.Domain) {
+  Domain: (*string)((len=15) "maps.google.com"),
+  ID: <redacted>,
+  ParentDomain: (string) (len=36) "73da474d-55eb-41e9-8ca6-6b5ceb0eba35"
+}

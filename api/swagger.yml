@@ -280,6 +280,25 @@ paths:
           description: GetUserInfoResponse
           schema:
             $ref: '#/definitions/getUserInfoResponse'
+  /api/v1/domains:
+    post:
+      security:
+      - Bearer: []
+      description: Adds a domain, if it not already exists, to be stamped.
+      tags:
+      - domain
+      summary: Add a domain
+      operationId: PostDomainRoute
+      parameters:
+      - name: Payload
+        in: body
+        schema:
+          $ref: '#/definitions/postDomainPayload'
+      responses:
+        "200":
+          description: PostDomainResponse
+          schema:
+            $ref: '#/definitions/domain'
   /api/v1/push/test:
     get:
       security:
@@ -336,6 +355,27 @@ paths:
         "200":
           description: OK
 definitions:
+  domain:
+    type: object
+    required:
+    - id
+    - domain
+    properties:
+      domain:
+        description: the actual domain
+        type: string
+        format: url
+        example: maps.google.com
+      id:
+        description: ID of domain
+        type: string
+        format: uuid4
+        example: 891d37d3-c74f-493e-aea8-af73efd92016
+      parentDomain:
+        description: the parent domain, only exists if domain is a subdomain
+        type: string
+        format: url
+        example: google.com
   getUserInfoResponse:
     type: object
     required:
@@ -592,6 +632,20 @@ definitions:
         maxLength: 500
         minLength: 1
         example: correct horse battery staple
+  postDomainPayload:
+    type: object
+    required:
+    - domain
+    properties:
+      domain:
+        type: string
+        format: domain
+        example: maps.google.com
+      parentDomainID:
+        description: ID of parent domain
+        type: string
+        format: uuid4
+        example: 891d37d3-c74f-493e-aea8-af73efd92016
   postForgotPasswordCompletePayload:
     type: object
     required:

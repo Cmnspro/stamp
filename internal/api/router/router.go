@@ -8,6 +8,7 @@ import (
 	"stamp/internal/api"
 	"stamp/internal/api/handlers"
 	"stamp/internal/api/middleware"
+
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -186,7 +187,8 @@ func Init(s *api.Server) {
 		})),
 
 		// Your other endpoints, typically secured by bearer auth, available at /api/v1/**
-		APIV1Push: s.Echo.Group("/api/v1/push", middleware.Auth(s)),
+		APIV1Push:   s.Echo.Group("/api/v1/push", middleware.Auth(s)),
+		APIV1Domain: s.Echo.Group("/api/v1/domains", middleware.Auth(s)),
 	}
 
 	// ---

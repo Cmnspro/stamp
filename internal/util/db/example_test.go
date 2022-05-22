@@ -3,10 +3,10 @@ package db_test
 import (
 	"fmt"
 
-	"stamp/internal/models"
-	"stamp/internal/util/db"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+	"stamp/internal/models"
+	"stamp/internal/util/db"
 )
 
 type PublicName struct {

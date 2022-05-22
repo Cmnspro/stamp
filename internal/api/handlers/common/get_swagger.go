@@ -3,9 +3,9 @@ package common
 import (
 	"path/filepath"
 
+	"github.com/labstack/echo/v4"
 	"stamp/internal/api"
 	"stamp/internal/api/middleware"
-	"github.com/labstack/echo/v4"
 )
 
 func GetSwaggerRoute(s *api.Server) *echo.Route {

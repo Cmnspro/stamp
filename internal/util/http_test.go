@@ -9,17 +9,17 @@ import (
 	"path/filepath"
 	"testing"
 
-	"stamp/internal/api"
-	"stamp/internal/test"
-	"stamp/internal/types"
-	"stamp/internal/types/auth"
-	"stamp/internal/util"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/strfmt/conv"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/api"
+	"stamp/internal/test"
+	"stamp/internal/types"
+	"stamp/internal/types/auth"
+	"stamp/internal/util"
 )
 
 func TestBindAndValidateSuccess(t *testing.T) {

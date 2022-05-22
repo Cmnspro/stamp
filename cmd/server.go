@@ -12,6 +12,7 @@ import (
 	"stamp/internal/api"
 	"stamp/internal/api/router"
 	"stamp/internal/config"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -104,6 +105,10 @@ func runServer() {
 
 	if err := s.InitI18n(); err != nil {
 		log.Fatal().Err(err).Msg("Failed to initialize i18n service")
+	}
+
+	if err := s.InitLocalService(); err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize local service")
 	}
 
 	router.Init(s)

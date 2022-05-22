@@ -80,29 +80,6 @@ var UserTableColumns = struct {
 
 // Generated where
 
-type whereHelpernull_String struct{ field string }
-
-func (w whereHelpernull_String) EQ(x null.String) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_String) NEQ(x null.String) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-func (w whereHelpernull_String) LT(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_String) LTE(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_String) GT(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_String) GTE(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 type whereHelperbool struct{ field string }
 
 func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
@@ -160,12 +137,14 @@ var UserRels = struct {
 	PasswordResetTokens string
 	PushTokens          string
 	RefreshTokens       string
+	Votes               string
 }{
 	AppUserProfile:      "AppUserProfile",
 	AccessTokens:        "AccessTokens",
 	PasswordResetTokens: "PasswordResetTokens",
 	PushTokens:          "PushTokens",
 	RefreshTokens:       "RefreshTokens",
+	Votes:               "Votes",
 }
 
 // userR is where relationships are stored.
@@ -175,6 +154,7 @@ type userR struct {
 	PasswordResetTokens PasswordResetTokenSlice `boil:"PasswordResetTokens" json:"PasswordResetTokens" toml:"PasswordResetTokens" yaml:"PasswordResetTokens"`
 	PushTokens          PushTokenSlice          `boil:"PushTokens" json:"PushTokens" toml:"PushTokens" yaml:"PushTokens"`
 	RefreshTokens       RefreshTokenSlice       `boil:"RefreshTokens" json:"RefreshTokens" toml:"RefreshTokens" yaml:"RefreshTokens"`
+	Votes               VoteSlice               `boil:"Votes" json:"Votes" toml:"Votes" yaml:"Votes"`
 }
 
 // NewStruct creates a new relationship struct
@@ -376,6 +356,27 @@ func (o *User) RefreshTokens(mods ...qm.QueryMod) refreshTokenQuery {
 
 	if len(queries.GetSelect(query.Query)) == 0 {
 		queries.SetSelect(query.Query, []string{"\"refresh_tokens\".*"})
+	}
+
+	return query
+}
+
+// Votes retrieves all the vote's Votes with an executor.
+func (o *User) Votes(mods ...qm.QueryMod) voteQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"votes\".\"user_id\"=?", o.ID),
+	)
+
+	query := Votes(queryMods...)
+	queries.SetFrom(query.Query, "\"votes\"")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"\"votes\".*"})
 	}
 
 	return query
@@ -838,6 +839,97 @@ func (userL) LoadRefreshTokens(ctx context.Context, e boil.ContextExecutor, sing
 	return nil
 }
 
+// LoadVotes allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (userL) LoadVotes(ctx context.Context, e boil.ContextExecutor, singular bool, maybeUser interface{}, mods queries.Applicator) error {
+	var slice []*User
+	var object *User
+
+	if singular {
+		object = maybeUser.(*User)
+	} else {
+		slice = *maybeUser.(*[]*User)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &userR{}
+		}
+		args = append(args, object.ID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &userR{}
+			}
+
+			for _, a := range args {
+				if a == obj.ID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`votes`),
+		qm.WhereIn(`votes.user_id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load votes")
+	}
+
+	var resultSlice []*Vote
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice votes")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on votes")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for votes")
+	}
+
+	if singular {
+		object.R.Votes = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &voteR{}
+			}
+			foreign.R.User = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.UserID {
+				local.R.Votes = append(local.R.Votes, foreign)
+				if foreign.R == nil {
+					foreign.R = &voteR{}
+				}
+				foreign.R.User = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetAppUserProfile of the user to the related item.
 // Sets o.R.AppUserProfile to related.
 // Adds o to related.R.User.
@@ -1092,6 +1184,59 @@ func (o *User) AddRefreshTokens(ctx context.Context, exec boil.ContextExecutor, 
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &refreshTokenR{
+				User: o,
+			}
+		} else {
+			rel.R.User = o
+		}
+	}
+	return nil
+}
+
+// AddVotes adds the given related objects to the existing relationships
+// of the user, optionally inserting them as new records.
+// Appends related to o.R.Votes.
+// Sets related.R.User appropriately.
+func (o *User) AddVotes(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Vote) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.UserID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"votes\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
+				strmangle.WhereClause("\"", "\"", 2, votePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.UserID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &userR{
+			Votes: related,
+		}
+	} else {
+		o.R.Votes = append(o.R.Votes, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &voteR{
 				User: o,
 			}
 		} else {

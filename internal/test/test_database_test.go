@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"stamp/internal/test"
 	pUtil "stamp/internal/util"
-	"github.com/stretchr/testify/require"
 )
 
 func TestWithTestDatabaseConcurrentUsage(t *testing.T) {

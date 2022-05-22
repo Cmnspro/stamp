@@ -4,16 +4,16 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/labstack/echo/v4"
+	"github.com/lib/pq"
+	"github.com/pkg/errors"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/auth"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/models"
 	"stamp/internal/types"
 	"stamp/internal/util"
-	"github.com/labstack/echo/v4"
-	"github.com/lib/pq"
-	"github.com/pkg/errors"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func PostUpdatePushTokenRoute(s *api.Server) *echo.Route {

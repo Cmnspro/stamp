@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"stamp/internal/util"
 	"golang.org/x/sys/unix"
+	"stamp/internal/util"
 )
 
 func ProbeReadiness(ctx context.Context, database *sql.DB, writeablePaths []string) (string, []error) {

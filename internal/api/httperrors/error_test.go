@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
-	"stamp/internal/api/httperrors"
-	"stamp/internal/types"
 	"github.com/go-openapi/swag"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/api/httperrors"
+	"stamp/internal/types"
 )
 
 func TestHTTPErrorSimple(t *testing.T) {

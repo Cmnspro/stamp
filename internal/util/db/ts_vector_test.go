@@ -3,9 +3,9 @@ package db_test
 import (
 	"testing"
 
-	"stamp/internal/util/db"
 	"github.com/go-openapi/swag"
 	"github.com/stretchr/testify/assert"
+	"stamp/internal/util/db"
 )
 
 func TestSearchStringToTSQuery(t *testing.T) {

@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"testing"
 
-	"stamp/internal/models"
-	"stamp/internal/test"
 	_ "github.com/lib/pq"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"stamp/internal/models"
+	"stamp/internal/test"
 )
 
 func TestFixturesReload(t *testing.T) {

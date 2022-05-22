@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	"stamp/internal/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/text/language"
+	"stamp/internal/util"
 )
 
 func TestGetEnv(t *testing.T) {

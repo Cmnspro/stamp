@@ -1,0 +1,5 @@
+(types.Domain) {
+  Domain: (*string)((len=14) "duckduckgo.com"),
+  ID: <redacted>,
+  ParentDomain: (string) ""
+}

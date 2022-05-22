@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"stamp/internal/mailer/transport"
-	"stamp/internal/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/mailer/transport"
+	"stamp/internal/test"
 )
 
 func TestWithTestMailer(t *testing.T) {

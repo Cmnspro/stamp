@@ -4,9 +4,9 @@ import (
 	"regexp"
 	"testing"
 
-	"stamp/internal/util/hashing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/util/hashing"
 )
 
 func TestHashPassword(t *testing.T) {

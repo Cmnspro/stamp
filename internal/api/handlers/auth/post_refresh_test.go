@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"stamp/internal/api"
 	"stamp/internal/api/handlers/auth"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/api/middleware"
 	"stamp/internal/test"
 	"stamp/internal/types"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPostRefreshSuccess(t *testing.T) {

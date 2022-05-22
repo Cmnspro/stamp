@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"stamp/internal/api"
 	"stamp/internal/test"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetTestPush(t *testing.T) {

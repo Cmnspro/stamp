@@ -3,12 +3,12 @@ package db_test
 import (
 	"testing"
 
-	"stamp/internal/models"
-	"stamp/internal/test"
-	"stamp/internal/util/db"
 	"github.com/stretchr/testify/require"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+	"stamp/internal/models"
+	"stamp/internal/test"
+	"stamp/internal/util/db"
 )
 
 func TestWhereJSONStruct(t *testing.T) {

@@ -5,18 +5,18 @@ import (
 	"net/http"
 	"time"
 
-	"stamp/internal/api"
-	"stamp/internal/api/middleware"
-	"stamp/internal/models"
-	"stamp/internal/types"
-	"stamp/internal/util"
-	"stamp/internal/util/db"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/strfmt/conv"
 	"github.com/go-openapi/swag"
 	"github.com/labstack/echo/v4"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+	"stamp/internal/api"
+	"stamp/internal/api/middleware"
+	"stamp/internal/models"
+	"stamp/internal/types"
+	"stamp/internal/util"
+	"stamp/internal/util/db"
 )
 
 func PostRefreshRoute(s *api.Server) *echo.Route {

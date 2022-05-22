@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/go-openapi/strfmt"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"stamp/internal/api"
 	"stamp/internal/models"
 	"stamp/internal/test"
 	"stamp/internal/types"
-	"github.com/go-openapi/strfmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestGetUserInfo(t *testing.T) {

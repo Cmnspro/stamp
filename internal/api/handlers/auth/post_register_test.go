@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-openapi/strfmt"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"stamp/internal/api"
 	"stamp/internal/api/handlers/auth"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/models"
 	"stamp/internal/test"
 	"stamp/internal/types"
-	"github.com/go-openapi/strfmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 func TestPostRegisterSuccess(t *testing.T) {

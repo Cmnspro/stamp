@@ -7,14 +7,14 @@ import (
 	"path"
 	"time"
 
+	"github.com/labstack/echo/v4"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/models"
 	"stamp/internal/types"
 	"stamp/internal/util"
 	"stamp/internal/util/db"
-	"github.com/labstack/echo/v4"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func PostForgotPasswordRoute(s *api.Server) *echo.Route {

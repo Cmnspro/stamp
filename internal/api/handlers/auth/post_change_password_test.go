@@ -6,16 +6,16 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/handlers/auth"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/api/middleware"
 	"stamp/internal/test"
 	"stamp/internal/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func TestPostChangePasswordSuccess(t *testing.T) {

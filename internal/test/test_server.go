@@ -82,6 +82,10 @@ func execClosureNewTestServer(ctx context.Context, t *testing.T, config config.S
 		t.Fatalf("Failed to init i18n service: %v", err)
 	}
 
+	if err := s.InitLocalService(); err != nil {
+		t.Fatalf("Failed to initialize local service: %v", err)
+	}
+
 	router.Init(s)
 
 	closure(s)

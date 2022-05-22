@@ -2,11 +2,12 @@
 package handlers
 
 import (
+	"github.com/labstack/echo/v4"
 	"stamp/internal/api"
 	"stamp/internal/api/handlers/auth"
 	"stamp/internal/api/handlers/common"
+	"stamp/internal/api/handlers/domain"
 	"stamp/internal/api/handlers/push"
-	"github.com/labstack/echo/v4"
 )
 
 func AttachAllRoutes(s *api.Server) {
@@ -24,6 +25,7 @@ func AttachAllRoutes(s *api.Server) {
 		common.GetReadyRoute(s),
 		common.GetSwaggerRoute(s),
 		common.GetVersionRoute(s),
+		domain.PostDomainRoute(s),
 		push.GetPushTestRoute(s),
 		push.PostUpdatePushTokenRoute(s),
 	}

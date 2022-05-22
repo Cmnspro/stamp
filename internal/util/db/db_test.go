@@ -5,14 +5,14 @@ import (
 	"database/sql"
 	"testing"
 
-	"stamp/internal/models"
-	"stamp/internal/test"
-	"stamp/internal/util/db"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/types"
+	"stamp/internal/models"
+	"stamp/internal/test"
+	"stamp/internal/util/db"
 )
 
 func TestWithTransactionSuccess(t *testing.T) {

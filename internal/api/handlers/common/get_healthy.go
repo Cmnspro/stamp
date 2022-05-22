@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"stamp/internal/api"
 	"github.com/labstack/echo/v4"
+	"stamp/internal/api"
 )
 
 func GetHealthyRoute(s *api.Server) *echo.Route {

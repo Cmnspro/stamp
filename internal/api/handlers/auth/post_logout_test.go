@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"stamp/internal/api"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/api/middleware"
 	"stamp/internal/test"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPostLogoutSuccess(t *testing.T) {

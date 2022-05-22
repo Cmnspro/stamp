@@ -6,12 +6,12 @@ import (
 	"regexp"
 	"testing"
 
-	"stamp/internal/test"
-	"stamp/internal/test/mocks"
-	"stamp/internal/util"
 	"github.com/go-openapi/swag"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/test"
+	"stamp/internal/test/mocks"
+	"stamp/internal/util"
 )
 
 func TestSnapshot(t *testing.T) {

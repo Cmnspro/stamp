@@ -5,14 +5,14 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/labstack/echo/v4"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/auth"
 	"stamp/internal/models"
 	"stamp/internal/types"
 	"stamp/internal/util"
 	"stamp/internal/util/db"
-	"github.com/labstack/echo/v4"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func PostLogoutRoute(s *api.Server) *echo.Route {

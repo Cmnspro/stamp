@@ -14,91 +14,131 @@ import "testing"
 func TestParent(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokens)
 	t.Run("AppUserProfiles", testAppUserProfiles)
+	t.Run("DomainStamps", testDomainStamps)
+	t.Run("Domains", testDomains)
 	t.Run("PasswordResetTokens", testPasswordResetTokens)
 	t.Run("PushTokens", testPushTokens)
 	t.Run("RefreshTokens", testRefreshTokens)
+	t.Run("Stamps", testStamps)
 	t.Run("Users", testUsers)
+	t.Run("Votes", testVotes)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensDelete)
 	t.Run("AppUserProfiles", testAppUserProfilesDelete)
+	t.Run("DomainStamps", testDomainStampsDelete)
+	t.Run("Domains", testDomainsDelete)
 	t.Run("PasswordResetTokens", testPasswordResetTokensDelete)
 	t.Run("PushTokens", testPushTokensDelete)
 	t.Run("RefreshTokens", testRefreshTokensDelete)
+	t.Run("Stamps", testStampsDelete)
 	t.Run("Users", testUsersDelete)
+	t.Run("Votes", testVotesDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensQueryDeleteAll)
 	t.Run("AppUserProfiles", testAppUserProfilesQueryDeleteAll)
+	t.Run("DomainStamps", testDomainStampsQueryDeleteAll)
+	t.Run("Domains", testDomainsQueryDeleteAll)
 	t.Run("PasswordResetTokens", testPasswordResetTokensQueryDeleteAll)
 	t.Run("PushTokens", testPushTokensQueryDeleteAll)
 	t.Run("RefreshTokens", testRefreshTokensQueryDeleteAll)
+	t.Run("Stamps", testStampsQueryDeleteAll)
 	t.Run("Users", testUsersQueryDeleteAll)
+	t.Run("Votes", testVotesQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensSliceDeleteAll)
 	t.Run("AppUserProfiles", testAppUserProfilesSliceDeleteAll)
+	t.Run("DomainStamps", testDomainStampsSliceDeleteAll)
+	t.Run("Domains", testDomainsSliceDeleteAll)
 	t.Run("PasswordResetTokens", testPasswordResetTokensSliceDeleteAll)
 	t.Run("PushTokens", testPushTokensSliceDeleteAll)
 	t.Run("RefreshTokens", testRefreshTokensSliceDeleteAll)
+	t.Run("Stamps", testStampsSliceDeleteAll)
 	t.Run("Users", testUsersSliceDeleteAll)
+	t.Run("Votes", testVotesSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensExists)
 	t.Run("AppUserProfiles", testAppUserProfilesExists)
+	t.Run("DomainStamps", testDomainStampsExists)
+	t.Run("Domains", testDomainsExists)
 	t.Run("PasswordResetTokens", testPasswordResetTokensExists)
 	t.Run("PushTokens", testPushTokensExists)
 	t.Run("RefreshTokens", testRefreshTokensExists)
+	t.Run("Stamps", testStampsExists)
 	t.Run("Users", testUsersExists)
+	t.Run("Votes", testVotesExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensFind)
 	t.Run("AppUserProfiles", testAppUserProfilesFind)
+	t.Run("DomainStamps", testDomainStampsFind)
+	t.Run("Domains", testDomainsFind)
 	t.Run("PasswordResetTokens", testPasswordResetTokensFind)
 	t.Run("PushTokens", testPushTokensFind)
 	t.Run("RefreshTokens", testRefreshTokensFind)
+	t.Run("Stamps", testStampsFind)
 	t.Run("Users", testUsersFind)
+	t.Run("Votes", testVotesFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensBind)
 	t.Run("AppUserProfiles", testAppUserProfilesBind)
+	t.Run("DomainStamps", testDomainStampsBind)
+	t.Run("Domains", testDomainsBind)
 	t.Run("PasswordResetTokens", testPasswordResetTokensBind)
 	t.Run("PushTokens", testPushTokensBind)
 	t.Run("RefreshTokens", testRefreshTokensBind)
+	t.Run("Stamps", testStampsBind)
 	t.Run("Users", testUsersBind)
+	t.Run("Votes", testVotesBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensOne)
 	t.Run("AppUserProfiles", testAppUserProfilesOne)
+	t.Run("DomainStamps", testDomainStampsOne)
+	t.Run("Domains", testDomainsOne)
 	t.Run("PasswordResetTokens", testPasswordResetTokensOne)
 	t.Run("PushTokens", testPushTokensOne)
 	t.Run("RefreshTokens", testRefreshTokensOne)
+	t.Run("Stamps", testStampsOne)
 	t.Run("Users", testUsersOne)
+	t.Run("Votes", testVotesOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensAll)
 	t.Run("AppUserProfiles", testAppUserProfilesAll)
+	t.Run("DomainStamps", testDomainStampsAll)
+	t.Run("Domains", testDomainsAll)
 	t.Run("PasswordResetTokens", testPasswordResetTokensAll)
 	t.Run("PushTokens", testPushTokensAll)
 	t.Run("RefreshTokens", testRefreshTokensAll)
+	t.Run("Stamps", testStampsAll)
 	t.Run("Users", testUsersAll)
+	t.Run("Votes", testVotesAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensCount)
 	t.Run("AppUserProfiles", testAppUserProfilesCount)
+	t.Run("DomainStamps", testDomainStampsCount)
+	t.Run("Domains", testDomainsCount)
 	t.Run("PasswordResetTokens", testPasswordResetTokensCount)
 	t.Run("PushTokens", testPushTokensCount)
 	t.Run("RefreshTokens", testRefreshTokensCount)
+	t.Run("Stamps", testStampsCount)
 	t.Run("Users", testUsersCount)
+	t.Run("Votes", testVotesCount)
 }
 
 func TestInsert(t *testing.T) {
@@ -106,14 +146,22 @@ func TestInsert(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensInsertWhitelist)
 	t.Run("AppUserProfiles", testAppUserProfilesInsert)
 	t.Run("AppUserProfiles", testAppUserProfilesInsertWhitelist)
+	t.Run("DomainStamps", testDomainStampsInsert)
+	t.Run("DomainStamps", testDomainStampsInsertWhitelist)
+	t.Run("Domains", testDomainsInsert)
+	t.Run("Domains", testDomainsInsertWhitelist)
 	t.Run("PasswordResetTokens", testPasswordResetTokensInsert)
 	t.Run("PasswordResetTokens", testPasswordResetTokensInsertWhitelist)
 	t.Run("PushTokens", testPushTokensInsert)
 	t.Run("PushTokens", testPushTokensInsertWhitelist)
 	t.Run("RefreshTokens", testRefreshTokensInsert)
 	t.Run("RefreshTokens", testRefreshTokensInsertWhitelist)
+	t.Run("Stamps", testStampsInsert)
+	t.Run("Stamps", testStampsInsertWhitelist)
 	t.Run("Users", testUsersInsert)
 	t.Run("Users", testUsersInsertWhitelist)
+	t.Run("Votes", testVotesInsert)
+	t.Run("Votes", testVotesInsertWhitelist)
 }
 
 // TestToOne tests cannot be run in parallel
@@ -121,9 +169,13 @@ func TestInsert(t *testing.T) {
 func TestToOne(t *testing.T) {
 	t.Run("AccessTokenToUserUsingUser", testAccessTokenToOneUserUsingUser)
 	t.Run("AppUserProfileToUserUsingUser", testAppUserProfileToOneUserUsingUser)
+	t.Run("DomainStampToDomainUsingDomain", testDomainStampToOneDomainUsingDomain)
+	t.Run("DomainStampToStampUsingStamp", testDomainStampToOneStampUsingStamp)
 	t.Run("PasswordResetTokenToUserUsingUser", testPasswordResetTokenToOneUserUsingUser)
 	t.Run("PushTokenToUserUsingUser", testPushTokenToOneUserUsingUser)
 	t.Run("RefreshTokenToUserUsingUser", testRefreshTokenToOneUserUsingUser)
+	t.Run("VoteToDomainStampUsingDomainStamp", testVoteToOneDomainStampUsingDomainStamp)
+	t.Run("VoteToUserUsingUser", testVoteToOneUserUsingUser)
 }
 
 // TestOneToOne tests cannot be run in parallel
@@ -135,10 +187,14 @@ func TestOneToOne(t *testing.T) {
 // TestToMany tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToMany(t *testing.T) {
+	t.Run("DomainStampToVotes", testDomainStampToManyVotes)
+	t.Run("DomainToDomainStamps", testDomainToManyDomainStamps)
+	t.Run("StampToDomainStamps", testStampToManyDomainStamps)
 	t.Run("UserToAccessTokens", testUserToManyAccessTokens)
 	t.Run("UserToPasswordResetTokens", testUserToManyPasswordResetTokens)
 	t.Run("UserToPushTokens", testUserToManyPushTokens)
 	t.Run("UserToRefreshTokens", testUserToManyRefreshTokens)
+	t.Run("UserToVotes", testUserToManyVotes)
 }
 
 // TestToOneSet tests cannot be run in parallel
@@ -146,9 +202,13 @@ func TestToMany(t *testing.T) {
 func TestToOneSet(t *testing.T) {
 	t.Run("AccessTokenToUserUsingAccessTokens", testAccessTokenToOneSetOpUserUsingUser)
 	t.Run("AppUserProfileToUserUsingAppUserProfile", testAppUserProfileToOneSetOpUserUsingUser)
+	t.Run("DomainStampToDomainUsingDomainStamps", testDomainStampToOneSetOpDomainUsingDomain)
+	t.Run("DomainStampToStampUsingDomainStamps", testDomainStampToOneSetOpStampUsingStamp)
 	t.Run("PasswordResetTokenToUserUsingPasswordResetTokens", testPasswordResetTokenToOneSetOpUserUsingUser)
 	t.Run("PushTokenToUserUsingPushTokens", testPushTokenToOneSetOpUserUsingUser)
 	t.Run("RefreshTokenToUserUsingRefreshTokens", testRefreshTokenToOneSetOpUserUsingUser)
+	t.Run("VoteToDomainStampUsingVotes", testVoteToOneSetOpDomainStampUsingDomainStamp)
+	t.Run("VoteToUserUsingVotes", testVoteToOneSetOpUserUsingUser)
 }
 
 // TestToOneRemove tests cannot be run in parallel
@@ -168,10 +228,14 @@ func TestOneToOneRemove(t *testing.T) {}
 // TestToManyAdd tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToManyAdd(t *testing.T) {
+	t.Run("DomainStampToVotes", testDomainStampToManyAddOpVotes)
+	t.Run("DomainToDomainStamps", testDomainToManyAddOpDomainStamps)
+	t.Run("StampToDomainStamps", testStampToManyAddOpDomainStamps)
 	t.Run("UserToAccessTokens", testUserToManyAddOpAccessTokens)
 	t.Run("UserToPasswordResetTokens", testUserToManyAddOpPasswordResetTokens)
 	t.Run("UserToPushTokens", testUserToManyAddOpPushTokens)
 	t.Run("UserToRefreshTokens", testUserToManyAddOpRefreshTokens)
+	t.Run("UserToVotes", testUserToManyAddOpVotes)
 }
 
 // TestToManySet tests cannot be run in parallel
@@ -185,44 +249,64 @@ func TestToManyRemove(t *testing.T) {}
 func TestReload(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensReload)
 	t.Run("AppUserProfiles", testAppUserProfilesReload)
+	t.Run("DomainStamps", testDomainStampsReload)
+	t.Run("Domains", testDomainsReload)
 	t.Run("PasswordResetTokens", testPasswordResetTokensReload)
 	t.Run("PushTokens", testPushTokensReload)
 	t.Run("RefreshTokens", testRefreshTokensReload)
+	t.Run("Stamps", testStampsReload)
 	t.Run("Users", testUsersReload)
+	t.Run("Votes", testVotesReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensReloadAll)
 	t.Run("AppUserProfiles", testAppUserProfilesReloadAll)
+	t.Run("DomainStamps", testDomainStampsReloadAll)
+	t.Run("Domains", testDomainsReloadAll)
 	t.Run("PasswordResetTokens", testPasswordResetTokensReloadAll)
 	t.Run("PushTokens", testPushTokensReloadAll)
 	t.Run("RefreshTokens", testRefreshTokensReloadAll)
+	t.Run("Stamps", testStampsReloadAll)
 	t.Run("Users", testUsersReloadAll)
+	t.Run("Votes", testVotesReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensSelect)
 	t.Run("AppUserProfiles", testAppUserProfilesSelect)
+	t.Run("DomainStamps", testDomainStampsSelect)
+	t.Run("Domains", testDomainsSelect)
 	t.Run("PasswordResetTokens", testPasswordResetTokensSelect)
 	t.Run("PushTokens", testPushTokensSelect)
 	t.Run("RefreshTokens", testRefreshTokensSelect)
+	t.Run("Stamps", testStampsSelect)
 	t.Run("Users", testUsersSelect)
+	t.Run("Votes", testVotesSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensUpdate)
 	t.Run("AppUserProfiles", testAppUserProfilesUpdate)
+	t.Run("DomainStamps", testDomainStampsUpdate)
+	t.Run("Domains", testDomainsUpdate)
 	t.Run("PasswordResetTokens", testPasswordResetTokensUpdate)
 	t.Run("PushTokens", testPushTokensUpdate)
 	t.Run("RefreshTokens", testRefreshTokensUpdate)
+	t.Run("Stamps", testStampsUpdate)
 	t.Run("Users", testUsersUpdate)
+	t.Run("Votes", testVotesUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensSliceUpdateAll)
 	t.Run("AppUserProfiles", testAppUserProfilesSliceUpdateAll)
+	t.Run("DomainStamps", testDomainStampsSliceUpdateAll)
+	t.Run("Domains", testDomainsSliceUpdateAll)
 	t.Run("PasswordResetTokens", testPasswordResetTokensSliceUpdateAll)
 	t.Run("PushTokens", testPushTokensSliceUpdateAll)
 	t.Run("RefreshTokens", testRefreshTokensSliceUpdateAll)
+	t.Run("Stamps", testStampsSliceUpdateAll)
 	t.Run("Users", testUsersSliceUpdateAll)
+	t.Run("Votes", testVotesSliceUpdateAll)
 }

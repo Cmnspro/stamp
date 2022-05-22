@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"stamp/internal/test"
-	"stamp/internal/util"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/strfmt/conv"
 	"github.com/stretchr/testify/require"
+	"stamp/internal/test"
+	"stamp/internal/util"
 )
 
 func TestCompareFileHashes(t *testing.T) {

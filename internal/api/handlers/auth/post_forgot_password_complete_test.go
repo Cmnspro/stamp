@@ -7,6 +7,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/handlers/auth"
 	"stamp/internal/api/httperrors"
@@ -14,10 +18,6 @@ import (
 	"stamp/internal/models"
 	"stamp/internal/test"
 	"stamp/internal/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func TestPostForgotPasswordCompleteSuccess(t *testing.T) {
