@@ -28,6 +28,7 @@ type Router struct {
 	APIV1Auth   *echo.Group
 	APIV1Push   *echo.Group
 	APIV1Domain *echo.Group
+	APIV1Stamp  *echo.Group
 }
 
 type Server struct {

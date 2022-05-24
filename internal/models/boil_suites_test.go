@@ -171,6 +171,7 @@ func TestToOne(t *testing.T) {
 	t.Run("AppUserProfileToUserUsingUser", testAppUserProfileToOneUserUsingUser)
 	t.Run("DomainStampToDomainUsingDomain", testDomainStampToOneDomainUsingDomain)
 	t.Run("DomainStampToStampUsingStamp", testDomainStampToOneStampUsingStamp)
+	t.Run("DomainToDomainUsingParent", testDomainToOneDomainUsingParent)
 	t.Run("PasswordResetTokenToUserUsingUser", testPasswordResetTokenToOneUserUsingUser)
 	t.Run("PushTokenToUserUsingUser", testPushTokenToOneUserUsingUser)
 	t.Run("RefreshTokenToUserUsingUser", testRefreshTokenToOneUserUsingUser)
@@ -189,6 +190,7 @@ func TestOneToOne(t *testing.T) {
 func TestToMany(t *testing.T) {
 	t.Run("DomainStampToVotes", testDomainStampToManyVotes)
 	t.Run("DomainToDomainStamps", testDomainToManyDomainStamps)
+	t.Run("DomainToParentDomains", testDomainToManyParentDomains)
 	t.Run("StampToDomainStamps", testStampToManyDomainStamps)
 	t.Run("UserToAccessTokens", testUserToManyAccessTokens)
 	t.Run("UserToPasswordResetTokens", testUserToManyPasswordResetTokens)
@@ -204,6 +206,7 @@ func TestToOneSet(t *testing.T) {
 	t.Run("AppUserProfileToUserUsingAppUserProfile", testAppUserProfileToOneSetOpUserUsingUser)
 	t.Run("DomainStampToDomainUsingDomainStamps", testDomainStampToOneSetOpDomainUsingDomain)
 	t.Run("DomainStampToStampUsingDomainStamps", testDomainStampToOneSetOpStampUsingStamp)
+	t.Run("DomainToDomainUsingParentDomains", testDomainToOneSetOpDomainUsingParent)
 	t.Run("PasswordResetTokenToUserUsingPasswordResetTokens", testPasswordResetTokenToOneSetOpUserUsingUser)
 	t.Run("PushTokenToUserUsingPushTokens", testPushTokenToOneSetOpUserUsingUser)
 	t.Run("RefreshTokenToUserUsingRefreshTokens", testRefreshTokenToOneSetOpUserUsingUser)
@@ -213,7 +216,9 @@ func TestToOneSet(t *testing.T) {
 
 // TestToOneRemove tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToOneRemove(t *testing.T) {}
+func TestToOneRemove(t *testing.T) {
+	t.Run("DomainToDomainUsingParentDomains", testDomainToOneRemoveOpDomainUsingParent)
+}
 
 // TestOneToOneSet tests cannot be run in parallel
 // or deadlocks can occur.
@@ -230,6 +235,7 @@ func TestOneToOneRemove(t *testing.T) {}
 func TestToManyAdd(t *testing.T) {
 	t.Run("DomainStampToVotes", testDomainStampToManyAddOpVotes)
 	t.Run("DomainToDomainStamps", testDomainToManyAddOpDomainStamps)
+	t.Run("DomainToParentDomains", testDomainToManyAddOpParentDomains)
 	t.Run("StampToDomainStamps", testStampToManyAddOpDomainStamps)
 	t.Run("UserToAccessTokens", testUserToManyAddOpAccessTokens)
 	t.Run("UserToPasswordResetTokens", testUserToManyAddOpPasswordResetTokens)
@@ -240,11 +246,15 @@ func TestToManyAdd(t *testing.T) {
 
 // TestToManySet tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToManySet(t *testing.T) {}
+func TestToManySet(t *testing.T) {
+	t.Run("DomainToParentDomains", testDomainToManySetOpParentDomains)
+}
 
 // TestToManyRemove tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToManyRemove(t *testing.T) {}
+func TestToManyRemove(t *testing.T) {
+	t.Run("DomainToParentDomains", testDomainToManyRemoveOpParentDomains)
+}
 
 func TestReload(t *testing.T) {
 	t.Run("AccessTokens", testAccessTokensReload)

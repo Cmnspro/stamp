@@ -4,7 +4,7 @@ CREATE TABLE votes (
     domain_stamp_id uuid NOT NULL,
     user_id uuid NOT NULL,
     approved boolean NOT NULL,
-    rating integer,
+    rating bigint,
     created_at timestamptz NOT NULL,
     updated_at timestamptz NOT NULL,
     CONSTRAINT votes_pkey PRIMARY KEY (id),

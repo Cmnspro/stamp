@@ -103,14 +103,20 @@ var DomainWhere = struct {
 
 // DomainRels is where relationship names are stored.
 var DomainRels = struct {
-	DomainStamps string
+	Parent        string
+	DomainStamps  string
+	ParentDomains string
 }{
-	DomainStamps: "DomainStamps",
+	Parent:        "Parent",
+	DomainStamps:  "DomainStamps",
+	ParentDomains: "ParentDomains",
 }
 
 // domainR is where relationships are stored.
 type domainR struct {
-	DomainStamps DomainStampSlice `boil:"DomainStamps" json:"DomainStamps" toml:"DomainStamps" yaml:"DomainStamps"`
+	Parent        *Domain          `boil:"Parent" json:"Parent" toml:"Parent" yaml:"Parent"`
+	DomainStamps  DomainStampSlice `boil:"DomainStamps" json:"DomainStamps" toml:"DomainStamps" yaml:"DomainStamps"`
+	ParentDomains DomainSlice      `boil:"ParentDomains" json:"ParentDomains" toml:"ParentDomains" yaml:"ParentDomains"`
 }
 
 // NewStruct creates a new relationship struct
@@ -219,6 +225,20 @@ func (q domainQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (boo
 	return count > 0, nil
 }
 
+// Parent pointed to by the foreign key.
+func (o *Domain) Parent(mods ...qm.QueryMod) domainQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.ParentID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Domains(queryMods...)
+	queries.SetFrom(query.Query, "\"domains\"")
+
+	return query
+}
+
 // DomainStamps retrieves all the domain_stamp's DomainStamps with an executor.
 func (o *Domain) DomainStamps(mods ...qm.QueryMod) domainStampQuery {
 	var queryMods []qm.QueryMod
@@ -238,6 +258,127 @@ func (o *Domain) DomainStamps(mods ...qm.QueryMod) domainStampQuery {
 	}
 
 	return query
+}
+
+// ParentDomains retrieves all the domain's Domains with an executor via parent_id column.
+func (o *Domain) ParentDomains(mods ...qm.QueryMod) domainQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"domains\".\"parent_id\"=?", o.ID),
+	)
+
+	query := Domains(queryMods...)
+	queries.SetFrom(query.Query, "\"domains\"")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"\"domains\".*"})
+	}
+
+	return query
+}
+
+// LoadParent allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (domainL) LoadParent(ctx context.Context, e boil.ContextExecutor, singular bool, maybeDomain interface{}, mods queries.Applicator) error {
+	var slice []*Domain
+	var object *Domain
+
+	if singular {
+		object = maybeDomain.(*Domain)
+	} else {
+		slice = *maybeDomain.(*[]*Domain)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &domainR{}
+		}
+		if !queries.IsNil(object.ParentID) {
+			args = append(args, object.ParentID)
+		}
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &domainR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.ParentID) {
+					continue Outer
+				}
+			}
+
+			if !queries.IsNil(obj.ParentID) {
+				args = append(args, obj.ParentID)
+			}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`domains`),
+		qm.WhereIn(`domains.id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Domain")
+	}
+
+	var resultSlice []*Domain
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Domain")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for domains")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for domains")
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Parent = foreign
+		if foreign.R == nil {
+			foreign.R = &domainR{}
+		}
+		foreign.R.ParentDomains = append(foreign.R.ParentDomains, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if queries.Equal(local.ParentID, foreign.ID) {
+				local.R.Parent = foreign
+				if foreign.R == nil {
+					foreign.R = &domainR{}
+				}
+				foreign.R.ParentDomains = append(foreign.R.ParentDomains, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadDomainStamps allows an eager lookup of values, cached into the
@@ -331,6 +472,177 @@ func (domainL) LoadDomainStamps(ctx context.Context, e boil.ContextExecutor, sin
 	return nil
 }
 
+// LoadParentDomains allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (domainL) LoadParentDomains(ctx context.Context, e boil.ContextExecutor, singular bool, maybeDomain interface{}, mods queries.Applicator) error {
+	var slice []*Domain
+	var object *Domain
+
+	if singular {
+		object = maybeDomain.(*Domain)
+	} else {
+		slice = *maybeDomain.(*[]*Domain)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &domainR{}
+		}
+		args = append(args, object.ID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &domainR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.ID) {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`domains`),
+		qm.WhereIn(`domains.parent_id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load domains")
+	}
+
+	var resultSlice []*Domain
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice domains")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on domains")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for domains")
+	}
+
+	if singular {
+		object.R.ParentDomains = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &domainR{}
+			}
+			foreign.R.Parent = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if queries.Equal(local.ID, foreign.ParentID) {
+				local.R.ParentDomains = append(local.R.ParentDomains, foreign)
+				if foreign.R == nil {
+					foreign.R = &domainR{}
+				}
+				foreign.R.Parent = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetParent of the domain to the related item.
+// Sets o.R.Parent to related.
+// Adds o to related.R.ParentDomains.
+func (o *Domain) SetParent(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Domain) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"domains\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"parent_id"}),
+		strmangle.WhereClause("\"", "\"", 2, domainPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	queries.Assign(&o.ParentID, related.ID)
+	if o.R == nil {
+		o.R = &domainR{
+			Parent: related,
+		}
+	} else {
+		o.R.Parent = related
+	}
+
+	if related.R == nil {
+		related.R = &domainR{
+			ParentDomains: DomainSlice{o},
+		}
+	} else {
+		related.R.ParentDomains = append(related.R.ParentDomains, o)
+	}
+
+	return nil
+}
+
+// RemoveParent relationship.
+// Sets o.R.Parent to nil.
+// Removes o from all passed in related items' relationships struct (Optional).
+func (o *Domain) RemoveParent(ctx context.Context, exec boil.ContextExecutor, related *Domain) error {
+	var err error
+
+	queries.SetScanner(&o.ParentID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("parent_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	if o.R != nil {
+		o.R.Parent = nil
+	}
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.ParentDomains {
+		if queries.Equal(o.ParentID, ri.ParentID) {
+			continue
+		}
+
+		ln := len(related.R.ParentDomains)
+		if ln > 1 && i < ln-1 {
+			related.R.ParentDomains[i] = related.R.ParentDomains[ln-1]
+		}
+		related.R.ParentDomains = related.R.ParentDomains[:ln-1]
+		break
+	}
+	return nil
+}
+
 // AddDomainStamps adds the given related objects to the existing relationships
 // of the domain, optionally inserting them as new records.
 // Appends related to o.R.DomainStamps.
@@ -381,6 +693,133 @@ func (o *Domain) AddDomainStamps(ctx context.Context, exec boil.ContextExecutor,
 			rel.R.Domain = o
 		}
 	}
+	return nil
+}
+
+// AddParentDomains adds the given related objects to the existing relationships
+// of the domain, optionally inserting them as new records.
+// Appends related to o.R.ParentDomains.
+// Sets related.R.Parent appropriately.
+func (o *Domain) AddParentDomains(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Domain) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			queries.Assign(&rel.ParentID, o.ID)
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"domains\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"parent_id"}),
+				strmangle.WhereClause("\"", "\"", 2, domainPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			queries.Assign(&rel.ParentID, o.ID)
+		}
+	}
+
+	if o.R == nil {
+		o.R = &domainR{
+			ParentDomains: related,
+		}
+	} else {
+		o.R.ParentDomains = append(o.R.ParentDomains, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &domainR{
+				Parent: o,
+			}
+		} else {
+			rel.R.Parent = o
+		}
+	}
+	return nil
+}
+
+// SetParentDomains removes all previously related items of the
+// domain replacing them completely with the passed
+// in related items, optionally inserting them as new records.
+// Sets o.R.Parent's ParentDomains accordingly.
+// Replaces o.R.ParentDomains with related.
+// Sets related.R.Parent's ParentDomains accordingly.
+func (o *Domain) SetParentDomains(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Domain) error {
+	query := "update \"domains\" set \"parent_id\" = null where \"parent_id\" = $1"
+	values := []interface{}{o.ID}
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, query)
+		fmt.Fprintln(writer, values)
+	}
+	_, err := exec.ExecContext(ctx, query, values...)
+	if err != nil {
+		return errors.Wrap(err, "failed to remove relationships before set")
+	}
+
+	if o.R != nil {
+		for _, rel := range o.R.ParentDomains {
+			queries.SetScanner(&rel.ParentID, nil)
+			if rel.R == nil {
+				continue
+			}
+
+			rel.R.Parent = nil
+		}
+
+		o.R.ParentDomains = nil
+	}
+	return o.AddParentDomains(ctx, exec, insert, related...)
+}
+
+// RemoveParentDomains relationships from objects passed in.
+// Removes related items from R.ParentDomains (uses pointer comparison, removal does not keep order)
+// Sets related.R.Parent.
+func (o *Domain) RemoveParentDomains(ctx context.Context, exec boil.ContextExecutor, related ...*Domain) error {
+	if len(related) == 0 {
+		return nil
+	}
+
+	var err error
+	for _, rel := range related {
+		queries.SetScanner(&rel.ParentID, nil)
+		if rel.R != nil {
+			rel.R.Parent = nil
+		}
+		if _, err = rel.Update(ctx, exec, boil.Whitelist("parent_id")); err != nil {
+			return err
+		}
+	}
+	if o.R == nil {
+		return nil
+	}
+
+	for _, rel := range related {
+		for i, ri := range o.R.ParentDomains {
+			if rel != ri {
+				continue
+			}
+
+			ln := len(o.R.ParentDomains)
+			if ln > 1 && i < ln-1 {
+				o.R.ParentDomains[i] = o.R.ParentDomains[ln-1]
+			}
+			o.R.ParentDomains = o.R.ParentDomains[:ln-1]
+			break
+		}
+	}
+
 	return nil
 }
 

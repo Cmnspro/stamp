@@ -644,7 +644,7 @@ func testVotesSelect(t *testing.T) {
 }
 
 var (
-	voteDBTypes = map[string]string{`ID`: `uuid`, `DomainStampID`: `uuid`, `UserID`: `uuid`, `Approved`: `boolean`, `Rating`: `integer`, `CreatedAt`: `timestamp with time zone`, `UpdatedAt`: `timestamp with time zone`}
+	voteDBTypes = map[string]string{`ID`: `uuid`, `DomainStampID`: `uuid`, `UserID`: `uuid`, `Approved`: `boolean`, `Rating`: `bigint`, `CreatedAt`: `timestamp with time zone`, `UpdatedAt`: `timestamp with time zone`}
 	_           = bytes.MinRead
 )
 

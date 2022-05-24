@@ -1,0 +1,16 @@
+(types.PostStampResponse) {
+  DomainID: (*strfmt.UUID4)((len=36) 24f853f6-8c4a-4136-98b1-4cd059d5d09f),
+  StampID: (*strfmt.UUID4)((len=36) 1c8ceb14-b369-4cc8-9a85-8c0445588ee2),
+  Votes: ([]*types.Vote) (len=2) {
+    (*types.Vote)({
+      Approved: (*bool)(false),
+      DomainStampID: (*strfmt.UUID4)((len=36) 0f9d7de9-f615-43bd-88ca-fd89f9814270),
+      Rating: (*int64)(<nil>)
+    }),
+    (*types.Vote)({
+      Approved: (*bool)(true),
+      DomainStampID: (*strfmt.UUID4)((len=36) 0f9d7de9-f615-43bd-88ca-fd89f9814270),
+      Rating: (*int64)(9)
+    })
+  }
+}

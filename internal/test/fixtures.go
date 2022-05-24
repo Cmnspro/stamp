@@ -37,6 +37,10 @@ type FixtureMap struct {
 	User1PushToken                *models.PushToken
 	User1PushTokenAPN             *models.PushToken
 	Domain1                       *models.Domain
+	AnalyticsStamp                *models.Stamp
+	Domain2                       *models.Domain
+	Domain2AnalyticsStamp         *models.DomainStamp
+	Domain2AnalyticsStampVote1    *models.Vote
 }
 
 // Fixtures returns a function wrapping our fixtures, which tests are allowed to manipulate.
@@ -136,6 +140,29 @@ func Fixtures() FixtureMap {
 		Domain: "google.com",
 	}
 
+	f.AnalyticsStamp = &models.Stamp{
+		ID:   "1c8ceb14-b369-4cc8-9a85-8c0445588ee2",
+		Name: "Analytics",
+	}
+
+	f.Domain2 = &models.Domain{
+		ID:     "24f853f6-8c4a-4136-98b1-4cd059d5d09f",
+		Domain: "microsoft.com",
+	}
+
+	f.Domain2AnalyticsStamp = &models.DomainStamp{
+		ID:       "0f9d7de9-f615-43bd-88ca-fd89f9814270",
+		DomainID: f.Domain2.ID,
+		StampID:  f.AnalyticsStamp.ID,
+	}
+
+	f.Domain2AnalyticsStampVote1 = &models.Vote{
+		ID:            "f77307dd-f679-4065-b1c1-2cde58915f43",
+		DomainStampID: f.Domain2AnalyticsStamp.ID,
+		Approved:      false,
+		UserID:        f.User2.ID,
+	}
+
 	return f
 }
 
@@ -160,5 +187,9 @@ func Inserts() []Insertable {
 		fixtures.User1PushToken,
 		fixtures.User1PushTokenAPN,
 		fixtures.Domain1,
+		fixtures.AnalyticsStamp,
+		fixtures.Domain2,
+		fixtures.Domain2AnalyticsStamp,
+		fixtures.Domain2AnalyticsStampVote1,
 	}
 }

@@ -431,6 +431,83 @@ func testDomainToManyDomainStamps(t *testing.T) {
 	}
 }
 
+func testDomainToManyParentDomains(t *testing.T) {
+	var err error
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b, c Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, true, domainColumnsWithDefault...); err != nil {
+		t.Errorf("Unable to randomize Domain struct: %s", err)
+	}
+
+	if err := a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = randomize.Struct(seed, &b, domainDBTypes, false, domainColumnsWithDefault...); err != nil {
+		t.Fatal(err)
+	}
+	if err = randomize.Struct(seed, &c, domainDBTypes, false, domainColumnsWithDefault...); err != nil {
+		t.Fatal(err)
+	}
+
+	queries.Assign(&b.ParentID, a.ID)
+	queries.Assign(&c.ParentID, a.ID)
+	if err = b.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	check, err := a.ParentDomains().All(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	bFound, cFound := false, false
+	for _, v := range check {
+		if queries.Equal(v.ParentID, b.ParentID) {
+			bFound = true
+		}
+		if queries.Equal(v.ParentID, c.ParentID) {
+			cFound = true
+		}
+	}
+
+	if !bFound {
+		t.Error("expected to find b")
+	}
+	if !cFound {
+		t.Error("expected to find c")
+	}
+
+	slice := DomainSlice{&a}
+	if err = a.L.LoadParentDomains(ctx, tx, false, (*[]*Domain)(&slice), nil); err != nil {
+		t.Fatal(err)
+	}
+	if got := len(a.R.ParentDomains); got != 2 {
+		t.Error("number of eager loaded records wrong, got:", got)
+	}
+
+	a.R.ParentDomains = nil
+	if err = a.L.LoadParentDomains(ctx, tx, true, &a, nil); err != nil {
+		t.Fatal(err)
+	}
+	if got := len(a.R.ParentDomains); got != 2 {
+		t.Error("number of eager loaded records wrong, got:", got)
+	}
+
+	if t.Failed() {
+		t.Logf("%#v", check)
+	}
+}
+
 func testDomainToManyAddOpDomainStamps(t *testing.T) {
 	var err error
 
@@ -504,6 +581,416 @@ func testDomainToManyAddOpDomainStamps(t *testing.T) {
 		if want := int64((i + 1) * 2); count != want {
 			t.Error("want", want, "got", count)
 		}
+	}
+}
+func testDomainToManyAddOpParentDomains(t *testing.T) {
+	var err error
+
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b, c, d, e Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	foreigners := []*Domain{&b, &c, &d, &e}
+	for _, x := range foreigners {
+		if err = randomize.Struct(seed, x, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = b.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	foreignersSplitByInsertion := [][]*Domain{
+		{&b, &c},
+		{&d, &e},
+	}
+
+	for i, x := range foreignersSplitByInsertion {
+		err = a.AddParentDomains(ctx, tx, i != 0, x...)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		first := x[0]
+		second := x[1]
+
+		if !queries.Equal(a.ID, first.ParentID) {
+			t.Error("foreign key was wrong value", a.ID, first.ParentID)
+		}
+		if !queries.Equal(a.ID, second.ParentID) {
+			t.Error("foreign key was wrong value", a.ID, second.ParentID)
+		}
+
+		if first.R.Parent != &a {
+			t.Error("relationship was not added properly to the foreign slice")
+		}
+		if second.R.Parent != &a {
+			t.Error("relationship was not added properly to the foreign slice")
+		}
+
+		if a.R.ParentDomains[i*2] != first {
+			t.Error("relationship struct slice not set to correct value")
+		}
+		if a.R.ParentDomains[i*2+1] != second {
+			t.Error("relationship struct slice not set to correct value")
+		}
+
+		count, err := a.ParentDomains().Count(ctx, tx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if want := int64((i + 1) * 2); count != want {
+			t.Error("want", want, "got", count)
+		}
+	}
+}
+
+func testDomainToManySetOpParentDomains(t *testing.T) {
+	var err error
+
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b, c, d, e Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	foreigners := []*Domain{&b, &c, &d, &e}
+	for _, x := range foreigners {
+		if err = randomize.Struct(seed, x, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err = a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = b.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	err = a.SetParentDomains(ctx, tx, false, &b, &c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	count, err := a.ParentDomains().Count(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if count != 2 {
+		t.Error("count was wrong:", count)
+	}
+
+	err = a.SetParentDomains(ctx, tx, true, &d, &e)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	count, err = a.ParentDomains().Count(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if count != 2 {
+		t.Error("count was wrong:", count)
+	}
+
+	if !queries.IsValuerNil(b.ParentID) {
+		t.Error("want b's foreign key value to be nil")
+	}
+	if !queries.IsValuerNil(c.ParentID) {
+		t.Error("want c's foreign key value to be nil")
+	}
+	if !queries.Equal(a.ID, d.ParentID) {
+		t.Error("foreign key was wrong value", a.ID, d.ParentID)
+	}
+	if !queries.Equal(a.ID, e.ParentID) {
+		t.Error("foreign key was wrong value", a.ID, e.ParentID)
+	}
+
+	if b.R.Parent != nil {
+		t.Error("relationship was not removed properly from the foreign struct")
+	}
+	if c.R.Parent != nil {
+		t.Error("relationship was not removed properly from the foreign struct")
+	}
+	if d.R.Parent != &a {
+		t.Error("relationship was not added properly to the foreign struct")
+	}
+	if e.R.Parent != &a {
+		t.Error("relationship was not added properly to the foreign struct")
+	}
+
+	if a.R.ParentDomains[0] != &d {
+		t.Error("relationship struct slice not set to correct value")
+	}
+	if a.R.ParentDomains[1] != &e {
+		t.Error("relationship struct slice not set to correct value")
+	}
+}
+
+func testDomainToManyRemoveOpParentDomains(t *testing.T) {
+	var err error
+
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b, c, d, e Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	foreigners := []*Domain{&b, &c, &d, &e}
+	for _, x := range foreigners {
+		if err = randomize.Struct(seed, x, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	err = a.AddParentDomains(ctx, tx, true, foreigners...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	count, err := a.ParentDomains().Count(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if count != 4 {
+		t.Error("count was wrong:", count)
+	}
+
+	err = a.RemoveParentDomains(ctx, tx, foreigners[:2]...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	count, err = a.ParentDomains().Count(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if count != 2 {
+		t.Error("count was wrong:", count)
+	}
+
+	if !queries.IsValuerNil(b.ParentID) {
+		t.Error("want b's foreign key value to be nil")
+	}
+	if !queries.IsValuerNil(c.ParentID) {
+		t.Error("want c's foreign key value to be nil")
+	}
+
+	if b.R.Parent != nil {
+		t.Error("relationship was not removed properly from the foreign struct")
+	}
+	if c.R.Parent != nil {
+		t.Error("relationship was not removed properly from the foreign struct")
+	}
+	if d.R.Parent != &a {
+		t.Error("relationship to a should have been preserved")
+	}
+	if e.R.Parent != &a {
+		t.Error("relationship to a should have been preserved")
+	}
+
+	if len(a.R.ParentDomains) != 2 {
+		t.Error("should have preserved two relationships")
+	}
+
+	// Removal doesn't do a stable deletion for performance so we have to flip the order
+	if a.R.ParentDomains[1] != &d {
+		t.Error("relationship to d should have been preserved")
+	}
+	if a.R.ParentDomains[0] != &e {
+		t.Error("relationship to e should have been preserved")
+	}
+}
+
+func testDomainToOneDomainUsingParent(t *testing.T) {
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var local Domain
+	var foreign Domain
+
+	seed := randomize.NewSeed()
+	if err := randomize.Struct(seed, &local, domainDBTypes, true, domainColumnsWithDefault...); err != nil {
+		t.Errorf("Unable to randomize Domain struct: %s", err)
+	}
+	if err := randomize.Struct(seed, &foreign, domainDBTypes, false, domainColumnsWithDefault...); err != nil {
+		t.Errorf("Unable to randomize Domain struct: %s", err)
+	}
+
+	if err := foreign.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	queries.Assign(&local.ParentID, foreign.ID)
+	if err := local.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	check, err := local.Parent().One(ctx, tx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !queries.Equal(check.ID, foreign.ID) {
+		t.Errorf("want: %v, got %v", foreign.ID, check.ID)
+	}
+
+	slice := DomainSlice{&local}
+	if err = local.L.LoadParent(ctx, tx, false, (*[]*Domain)(&slice), nil); err != nil {
+		t.Fatal(err)
+	}
+	if local.R.Parent == nil {
+		t.Error("struct should have been eager loaded")
+	}
+
+	local.R.Parent = nil
+	if err = local.L.LoadParent(ctx, tx, true, &local, nil); err != nil {
+		t.Fatal(err)
+	}
+	if local.R.Parent == nil {
+		t.Error("struct should have been eager loaded")
+	}
+}
+
+func testDomainToOneSetOpDomainUsingParent(t *testing.T) {
+	var err error
+
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b, c Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	if err = randomize.Struct(seed, &b, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	if err = randomize.Struct(seed, &c, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+	if err = b.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	for i, x := range []*Domain{&b, &c} {
+		err = a.SetParent(ctx, tx, i != 0, x)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if a.R.Parent != x {
+			t.Error("relationship struct not set to correct value")
+		}
+
+		if x.R.ParentDomains[0] != &a {
+			t.Error("failed to append to foreign relationship struct")
+		}
+		if !queries.Equal(a.ParentID, x.ID) {
+			t.Error("foreign key was wrong value", a.ParentID)
+		}
+
+		zero := reflect.Zero(reflect.TypeOf(a.ParentID))
+		reflect.Indirect(reflect.ValueOf(&a.ParentID)).Set(zero)
+
+		if err = a.Reload(ctx, tx); err != nil {
+			t.Fatal("failed to reload", err)
+		}
+
+		if !queries.Equal(a.ParentID, x.ID) {
+			t.Error("foreign key was wrong value", a.ParentID, x.ID)
+		}
+	}
+}
+
+func testDomainToOneRemoveOpDomainUsingParent(t *testing.T) {
+	var err error
+
+	ctx := context.Background()
+	tx := MustTx(boil.BeginTx(ctx, nil))
+	defer func() { _ = tx.Rollback() }()
+
+	var a Domain
+	var b Domain
+
+	seed := randomize.NewSeed()
+	if err = randomize.Struct(seed, &a, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+	if err = randomize.Struct(seed, &b, domainDBTypes, false, strmangle.SetComplement(domainPrimaryKeyColumns, domainColumnsWithoutDefault)...); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = a.Insert(ctx, tx, boil.Infer()); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = a.SetParent(ctx, tx, true, &b); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = a.RemoveParent(ctx, tx, &b); err != nil {
+		t.Error("failed to remove relationship")
+	}
+
+	count, err := a.Parent().Count(ctx, tx)
+	if err != nil {
+		t.Error(err)
+	}
+	if count != 0 {
+		t.Error("want no relationships remaining")
+	}
+
+	if a.R.Parent != nil {
+		t.Error("R struct entry should be nil")
+	}
+
+	if !queries.IsValuerNil(a.ParentID) {
+		t.Error("foreign key value should be nil")
+	}
+
+	if len(b.R.ParentDomains) != 0 {
+		t.Error("failed to remove a from b's relationships")
 	}
 }
 

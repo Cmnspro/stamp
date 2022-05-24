@@ -1,0 +1,25 @@
+swagger: "2.0"
+info:
+  title: stamp
+  version: 0.1.0
+paths: {}
+definitions:
+  Vote:
+    type: object
+    required:
+      - approved
+      - domainStampId
+    properties: 
+      approved:
+        type: boolean
+        description: If the vote agrees with the stamp
+      domainStampId:
+        type: string
+        format: uuid4
+        description: The id of the relation domain stamp
+      rating:
+        type: integer
+        minimum: 0
+        maximum: 9
+        description: Optional rating, only possible if the vote agrees
+        x-nullable: true

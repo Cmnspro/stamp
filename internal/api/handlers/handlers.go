@@ -8,6 +8,7 @@ import (
 	"stamp/internal/api/handlers/common"
 	"stamp/internal/api/handlers/domain"
 	"stamp/internal/api/handlers/push"
+	"stamp/internal/api/handlers/stamp"
 )
 
 func AttachAllRoutes(s *api.Server) {
@@ -28,5 +29,6 @@ func AttachAllRoutes(s *api.Server) {
 		domain.PostDomainRoute(s),
 		push.GetPushTestRoute(s),
 		push.PostUpdatePushTokenRoute(s),
+		stamp.PostStampRoute(s),
 	}
 }
