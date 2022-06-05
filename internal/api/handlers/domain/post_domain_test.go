@@ -21,7 +21,7 @@ func TestPostDomain(t *testing.T) {
 		res := test.PerformRequest(t, s, "POST", "/api/v1/domains", payload, test.HeadersWithAuth(t, fix.User1AccessToken1.Token))
 		require.Equal(t, http.StatusOK, res.Result().StatusCode)
 
-		var response types.Domain
+		var response types.DomainResponse
 		test.ParseResponseAndValidate(t, res, &response)
 
 		test.Snapshoter.Skip([]string{"ID"}).Save(t, response)
@@ -40,7 +40,7 @@ func TestPostDomain_Subdomain(t *testing.T) {
 		res := test.PerformRequest(t, s, "POST", "/api/v1/domains", payload, test.HeadersWithAuth(t, fix.User1AccessToken1.Token))
 		require.Equal(t, http.StatusOK, res.Result().StatusCode)
 
-		var response types.Domain
+		var response types.DomainResponse
 		test.ParseResponseAndValidate(t, res, &response)
 
 		test.Snapshoter.Skip([]string{"ID"}).Save(t, response)

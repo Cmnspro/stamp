@@ -23,7 +23,7 @@ func TestPostStamp(t *testing.T) {
 		res := test.PerformRequest(t, s, "POST", "/api/v1/stamp", payload, test.HeadersWithAuth(t, fix.User1AccessToken1.Token))
 		require.Equal(t, http.StatusOK, res.Result().StatusCode)
 
-		var response types.PostStampResponse
+		var response types.Domain
 		test.ParseResponseAndValidate(t, res, &response)
 
 		test.Snapshoter.Skip([]string{"DomainStampID"}).Save(t, response)
@@ -44,7 +44,7 @@ func TestPostStampExistingDomain(t *testing.T) {
 		res := test.PerformRequest(t, s, "POST", "/api/v1/stamp", payload, test.HeadersWithAuth(t, fix.User1AccessToken1.Token))
 		require.Equal(t, http.StatusOK, res.Result().StatusCode)
 
-		var response types.PostStampResponse
+		var response types.Domain
 		test.ParseResponseAndValidate(t, res, &response)
 
 		test.Snapshoter.Save(t, response)

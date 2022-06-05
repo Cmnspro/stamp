@@ -15,35 +15,35 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// PostStampResponse post stamp response
+// Stamp stamp
 //
-// swagger:model postStampResponse
-type PostStampResponse struct {
+// swagger:model stamp
+type Stamp struct {
 
-	// ID of the domain
-	// Required: true
-	// Format: uuid4
-	DomainID *strfmt.UUID4 `json:"domainId"`
-
-	// ID of the stamp
+	// The ID of the stamp
 	// Required: true
 	// Format: uuid4
 	StampID *strfmt.UUID4 `json:"stampId"`
+
+	// The name of the Stamp
+	// Example: Analytics
+	// Required: true
+	StampName *string `json:"stampName"`
 
 	// votes
 	// Required: true
 	Votes []*Vote `json:"votes"`
 }
 
-// Validate validates this post stamp response
-func (m *PostStampResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this stamp
+func (m *Stamp) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateDomainID(formats); err != nil {
+	if err := m.validateStampID(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateStampID(formats); err != nil {
+	if err := m.validateStampName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,20 +57,7 @@ func (m *PostStampResponse) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *PostStampResponse) validateDomainID(formats strfmt.Registry) error {
-
-	if err := validate.Required("domainId", "body", m.DomainID); err != nil {
-		return err
-	}
-
-	if err := validate.FormatOf("domainId", "body", "uuid4", m.DomainID.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *PostStampResponse) validateStampID(formats strfmt.Registry) error {
+func (m *Stamp) validateStampID(formats strfmt.Registry) error {
 
 	if err := validate.Required("stampId", "body", m.StampID); err != nil {
 		return err
@@ -83,7 +70,16 @@ func (m *PostStampResponse) validateStampID(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *PostStampResponse) validateVotes(formats strfmt.Registry) error {
+func (m *Stamp) validateStampName(formats strfmt.Registry) error {
+
+	if err := validate.Required("stampName", "body", m.StampName); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Stamp) validateVotes(formats strfmt.Registry) error {
 
 	if err := validate.Required("votes", "body", m.Votes); err != nil {
 		return err
@@ -110,8 +106,8 @@ func (m *PostStampResponse) validateVotes(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this post stamp response based on the context it is used
-func (m *PostStampResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this stamp based on the context it is used
+func (m *Stamp) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateVotes(ctx, formats); err != nil {
@@ -124,7 +120,7 @@ func (m *PostStampResponse) ContextValidate(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *PostStampResponse) contextValidateVotes(ctx context.Context, formats strfmt.Registry) error {
+func (m *Stamp) contextValidateVotes(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Votes); i++ {
 
@@ -145,7 +141,7 @@ func (m *PostStampResponse) contextValidateVotes(ctx context.Context, formats st
 }
 
 // MarshalBinary interface implementation
-func (m *PostStampResponse) MarshalBinary() ([]byte, error) {
+func (m *Stamp) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -153,8 +149,8 @@ func (m *PostStampResponse) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *PostStampResponse) UnmarshalBinary(b []byte) error {
-	var res PostStampResponse
+func (m *Stamp) UnmarshalBinary(b []byte) error {
+	var res Stamp
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -1,11 +1,18 @@
-(types.PostStampResponse) {
+(types.Domain) {
+  Domain: (*string)((len=10) "google.com"),
   DomainID: (*strfmt.UUID4)((len=36) 73da474d-55eb-41e9-8ca6-6b5ceb0eba35),
-  StampID: (*strfmt.UUID4)((len=36) 1c8ceb14-b369-4cc8-9a85-8c0445588ee2),
-  Votes: ([]*types.Vote) (len=1) {
-    (*types.Vote)({
-      Approved: (*bool)(true),
-      DomainStampID: <redacted>,
-      Rating: (*int64)(<nil>)
+  ParentDomain: (string) "",
+  Stamps: ([]*types.Stamp) (len=1) {
+    (*types.Stamp)({
+      StampID: (*strfmt.UUID4)((len=36) 1c8ceb14-b369-4cc8-9a85-8c0445588ee2),
+      StampName: (*string)((len=9) "Analytics"),
+      Votes: ([]*types.Vote) (len=1) {
+        (*types.Vote)({
+          Approved: (*bool)(true),
+          DomainStampID: <redacted>,
+          Rating: (*int64)(<nil>)
+        })
+      }
     })
   }
 }

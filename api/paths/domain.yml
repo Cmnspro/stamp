@@ -2,6 +2,13 @@ swagger: "2.0"
 info:
   title: stamp
   version: 0.1.0
+parameters:
+  DomainIDParam:
+    type: string
+    format: uuid4
+    in: path
+    name: domainId
+    required: true
 paths:
   /api/v1/domains:
     post:
@@ -21,5 +28,20 @@ paths:
       responses:
         "200":
           description: PostDomainResponse
+          schema:
+            $ref: "../definitions/domain.yml#/definitions/DomainResponse"
+  /api/v1/domains/{domainId}:
+    get:
+      summary: Get a domain with all stamps and votes
+      operationId: GetDomainRoute
+      description: |-
+        Returns a domain with all available additional information like stamps and votes
+      parameters:
+        - $ref: "#/parameters/DomainIDParam"
+      tags:
+        - domain
+      responses:
+        "200":
+          description: GetDomainResponse
           schema:
             $ref: "../definitions/domain.yml#/definitions/Domain"

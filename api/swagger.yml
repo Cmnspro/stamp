@@ -298,6 +298,25 @@ paths:
         "200":
           description: PostDomainResponse
           schema:
+            $ref: '#/definitions/domainResponse'
+  /api/v1/domains/{domainId}:
+    get:
+      description: Returns a domain with all available additional information like
+        stamps and votes
+      tags:
+      - domain
+      summary: Get a domain with all stamps and votes
+      operationId: GetDomainRoute
+      parameters:
+      - type: string
+        format: uuid4
+        name: domainId
+        in: path
+        required: true
+      responses:
+        "200":
+          description: GetDomainResponse
+          schema:
             $ref: '#/definitions/domain'
   /api/v1/push/test:
     get:
@@ -358,7 +377,25 @@ paths:
         "200":
           description: PostStampResponse
           schema:
-            $ref: '#/definitions/postStampResponse'
+            $ref: '#/definitions/domain'
+  /api/v1/stamp/{voteId}:
+    delete:
+      security:
+      - Bearer: []
+      description: Delete a vote that you added to a stamp for a domain
+      tags:
+      - stamp
+      summary: Delete a vote for a stamp
+      operationId: DeleteVoteRoute
+      parameters:
+      - type: string
+        format: uuid4
+        name: voteId
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
   /swagger.yml:
     get:
       description: |-
@@ -375,6 +412,31 @@ paths:
           description: OK
 definitions:
   domain:
+    type: object
+    required:
+    - domainId
+    - domain
+    properties:
+      domain:
+        description: the actual domain
+        type: string
+        format: url
+        example: maps.google.com
+      domainId:
+        description: ID of domain
+        type: string
+        format: uuid4
+        example: 891d37d3-c74f-493e-aea8-af73efd92016
+      parentDomain:
+        description: the parent domain, only exists if domain is a subdomain
+        type: string
+        format: url
+        example: google.com
+      stamps:
+        type: array
+        items:
+          $ref: '#/definitions/stamp'
+  domainResponse:
     type: object
     required:
     - id
@@ -801,25 +863,6 @@ definitions:
         description: ID of the stamp
         type: string
         format: uuid4
-  postStampResponse:
-    type: object
-    required:
-    - domainId
-    - stampId
-    - votes
-    properties:
-      domainId:
-        description: ID of the domain
-        type: string
-        format: uuid4
-      stampId:
-        description: ID of the stamp
-        type: string
-        format: uuid4
-      votes:
-        type: array
-        items:
-          $ref: '#/definitions/vote'
   postUpdatePushTokenPayload:
     type: object
     required:
@@ -883,6 +926,25 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/httpValidationErrorDetail'
+  stamp:
+    type: object
+    required:
+    - stampId
+    - stampName
+    - votes
+    properties:
+      stampId:
+        description: The ID of the stamp
+        type: string
+        format: uuid4
+      stampName:
+        description: The name of the Stamp
+        type: string
+        example: Analytics
+      votes:
+        type: array
+        items:
+          $ref: '#/definitions/vote'
   vote:
     type: object
     required:
@@ -902,6 +964,19 @@ definitions:
         maximum: 9
         minimum: 0
         x-nullable: true
+parameters:
+  DomainIDParam:
+    type: string
+    format: uuid4
+    name: domainId
+    in: path
+    required: true
+  VoteIDParam:
+    type: string
+    format: uuid4
+    name: voteId
+    in: path
+    required: true
 responses:
   AuthForbiddenResponse:
     description: PublicHTTPError, type `USER_DEACTIVATED`/`NOT_LOCAL_USER`

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"stamp/internal/api"
 	"stamp/internal/api/auth"
+	"stamp/internal/data/dto"
 	"stamp/internal/types"
 	"stamp/internal/util"
 
@@ -25,12 +26,19 @@ func postStampHandler(s *api.Server) echo.HandlerFunc {
 			return err
 		}
 
-		domainStamp, err := s.Local.StampDomain(ctx, user, payload)
+		filter := dto.DomainStampFilter{
+			DomainID: payload.DomainID.String(),
+			StampID:  payload.StampID.String(),
+			Approved: *payload.Approved,
+			Rating:   payload.Rating,
+		}
+
+		domain, err := s.Local.StampDomain(ctx, user, filter)
 		if err != nil {
 			log.Debug().Err(err).Msg("Failed to stamp domain")
 			return err
 		}
 
-		return util.ValidateAndReturn(c, http.StatusOK, domainStamp.ToTypes())
+		return util.ValidateAndReturn(c, http.StatusOK, domain.ToTypes())
 	}
 }

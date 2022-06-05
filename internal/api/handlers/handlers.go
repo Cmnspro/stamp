@@ -26,9 +26,11 @@ func AttachAllRoutes(s *api.Server) {
 		common.GetReadyRoute(s),
 		common.GetSwaggerRoute(s),
 		common.GetVersionRoute(s),
+		domain.GetDomainRoute(s),
 		domain.PostDomainRoute(s),
 		push.GetPushTestRoute(s),
 		push.PostUpdatePushTokenRoute(s),
+		stamp.DeleteVoteRoute(s),
 		stamp.PostStampRoute(s),
 	}
 }

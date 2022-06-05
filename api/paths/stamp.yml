@@ -2,6 +2,13 @@ swagger: "2.0"
 info:
   title: stamp
   version: 0.1.0
+parameters:
+  VoteIDParam:
+    type: string
+    format: uuid4
+    in: path
+    name: voteId
+    required: true
 paths:
   /api/v1/stamp:
     post:
@@ -22,4 +29,19 @@ paths:
         "200":
           description: PostStampResponse
           schema:
-            $ref: "../definitions/stamp.yml#/definitions/PostStampResponse"
+            $ref: "../definitions/domain.yml#/definitions/Domain"
+  /api/v1/stamp/{voteId}:
+    delete:
+      summary: Delete a vote for a stamp
+      security:
+        - Bearer: []
+      operationId: DeleteVoteRoute
+      description: |-
+        Delete a vote that you added to a stamp for a domain
+      parameters:
+        - $ref: "#/parameters/VoteIDParam"
+      tags:
+        - stamp
+      responses:
+        "204":
+          description: NoContent

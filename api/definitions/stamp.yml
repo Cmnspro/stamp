@@ -28,21 +28,21 @@ definitions:
         maximum: 9
         description: Optional rating, only possible if the vote agrees
         x-nullable: true
-  PostStampResponse:
+  Stamp:
     type: object
     required:
-      - domainId
       - stampId
+      - stampName
       - votes
     properties: 
-      domainId:
-        type: string
-        format: uuid4
-        description: ID of the domain
       stampId:
         type: string
         format: uuid4
-        description: ID of the stamp
+        description: The ID of the stamp
+      stampName:
+        type: string
+        description: The name of the Stamp  
+        example: Analytics
       votes:
         type: array
         items: 

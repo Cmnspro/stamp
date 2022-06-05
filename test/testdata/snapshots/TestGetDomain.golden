@@ -6,16 +6,11 @@
     (*types.Stamp)({
       StampID: (*strfmt.UUID4)((len=36) 1c8ceb14-b369-4cc8-9a85-8c0445588ee2),
       StampName: (*string)((len=9) "Analytics"),
-      Votes: ([]*types.Vote) (len=2) {
+      Votes: ([]*types.Vote) (len=1) {
         (*types.Vote)({
           Approved: (*bool)(false),
           DomainStampID: (*strfmt.UUID4)((len=36) 0f9d7de9-f615-43bd-88ca-fd89f9814270),
           Rating: (*int64)(<nil>)
-        }),
-        (*types.Vote)({
-          Approved: (*bool)(true),
-          DomainStampID: (*strfmt.UUID4)((len=36) 0f9d7de9-f615-43bd-88ca-fd89f9814270),
-          Rating: (*int64)(9)
         })
       }
     })

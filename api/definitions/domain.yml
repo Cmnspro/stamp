@@ -18,7 +18,7 @@ definitions:
         format: uuid4
         description: ID of parent domain
         example: 891d37d3-c74f-493e-aea8-af73efd92016
-  Domain:
+  DomainResponse:
     type: object
     required:
       - id
@@ -39,3 +39,28 @@ definitions:
         format: url
         description: the parent domain, only exists if domain is a subdomain
         example: google.com
+  Domain:
+    type: object
+    required:
+      - domainId
+      - domain
+    properties: 
+      domainId:
+        type: string
+        format: uuid4
+        description: ID of domain
+        example: 891d37d3-c74f-493e-aea8-af73efd92016
+      domain:
+        type: string
+        format: url
+        description: the actual domain
+        example: maps.google.com
+      parentDomain:
+        type: string
+        format: url
+        description: the parent domain, only exists if domain is a subdomain
+        example: google.com
+      stamps:
+        type: array
+        items: 
+          $ref: "stamp.yml#/definitions/Stamp"

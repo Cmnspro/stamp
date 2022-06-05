@@ -7,6 +7,7 @@ package types
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -28,11 +29,14 @@ type Domain struct {
 	// Example: 891d37d3-c74f-493e-aea8-af73efd92016
 	// Required: true
 	// Format: uuid4
-	ID *strfmt.UUID4 `json:"id"`
+	DomainID *strfmt.UUID4 `json:"domainId"`
 
 	// the parent domain, only exists if domain is a subdomain
 	// Example: google.com
 	ParentDomain string `json:"parentDomain,omitempty"`
+
+	// stamps
+	Stamps []*Stamp `json:"stamps"`
 }
 
 // Validate validates this domain
@@ -43,7 +47,11 @@ func (m *Domain) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateID(formats); err != nil {
+	if err := m.validateDomainID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStamps(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -62,21 +70,76 @@ func (m *Domain) validateDomain(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Domain) validateID(formats strfmt.Registry) error {
+func (m *Domain) validateDomainID(formats strfmt.Registry) error {
 
-	if err := validate.Required("id", "body", m.ID); err != nil {
+	if err := validate.Required("domainId", "body", m.DomainID); err != nil {
 		return err
 	}
 
-	if err := validate.FormatOf("id", "body", "uuid4", m.ID.String(), formats); err != nil {
+	if err := validate.FormatOf("domainId", "body", "uuid4", m.DomainID.String(), formats); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-// ContextValidate validates this domain based on context it is used
+func (m *Domain) validateStamps(formats strfmt.Registry) error {
+	if swag.IsZero(m.Stamps) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Stamps); i++ {
+		if swag.IsZero(m.Stamps[i]) { // not required
+			continue
+		}
+
+		if m.Stamps[i] != nil {
+			if err := m.Stamps[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("stamps" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("stamps" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this domain based on the context it is used
 func (m *Domain) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateStamps(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Domain) contextValidateStamps(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Stamps); i++ {
+
+		if m.Stamps[i] != nil {
+			if err := m.Stamps[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("stamps" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("stamps" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
