@@ -27,12 +27,11 @@ type PostRegisterPayload struct {
 	Password *string `json:"password"`
 
 	// Username to register with
-	// Example: user@example.com
+	// Example: userexample
 	// Required: true
 	// Max Length: 255
 	// Min Length: 1
-	// Format: email
-	Username *strfmt.Email `json:"username"`
+	Username *string `json:"username"`
 }
 
 // Validate validates this post register payload
@@ -76,15 +75,11 @@ func (m *PostRegisterPayload) validateUsername(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("username", "body", m.Username.String(), 1); err != nil {
+	if err := validate.MinLength("username", "body", *m.Username, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("username", "body", m.Username.String(), 255); err != nil {
-		return err
-	}
-
-	if err := validate.FormatOf("username", "body", "email", m.Username.String(), formats); err != nil {
+	if err := validate.MaxLength("username", "body", *m.Username, 255); err != nil {
 		return err
 	}
 

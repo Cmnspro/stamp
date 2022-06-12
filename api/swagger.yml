@@ -835,10 +835,9 @@ definitions:
       username:
         description: Username to register with
         type: string
-        format: email
         maxLength: 255
         minLength: 1
-        example: user@example.com
+        example: userexample
   postStampPayload:
     type: object
     required:

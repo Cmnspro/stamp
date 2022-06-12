@@ -4,12 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/strfmt/conv"
-	"github.com/go-openapi/swag"
-	"github.com/labstack/echo/v4"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"stamp/internal/api"
 	"stamp/internal/api/httperrors"
 	"stamp/internal/models"
@@ -17,6 +11,13 @@ import (
 	"stamp/internal/util"
 	"stamp/internal/util/db"
 	"stamp/internal/util/hashing"
+
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt/conv"
+	"github.com/go-openapi/swag"
+	"github.com/labstack/echo/v4"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func PostRegisterRoute(s *api.Server) *echo.Route {
@@ -33,20 +34,20 @@ func postRegisterHandler(s *api.Server) echo.HandlerFunc {
 			return err
 		}
 
-		exists, err := models.Users(models.UserWhere.Username.EQ(null.StringFrom(body.Username.String()))).Exists(ctx, s.DB)
+		exists, err := models.Users(models.UserWhere.Username.EQ(null.StringFrom(*body.Username))).Exists(ctx, s.DB)
 		if err != nil {
-			log.Debug().Err(err).Str("username", body.Username.String()).Msg("Failed to check whether user exists")
+			log.Debug().Err(err).Str("username", *body.Username).Msg("Failed to check whether user exists")
 			return err
 		}
 
 		if exists {
-			log.Debug().Str("username", body.Username.String()).Msg("User with given username already exists")
+			log.Debug().Str("username", *body.Username).Msg("User with given username already exists")
 			return httperrors.ErrConflictUserAlreadyExists
 		}
 
 		hash, err := hashing.HashPassword(*body.Password, hashing.DefaultArgon2Params)
 		if err != nil {
-			log.Debug().Str("username", body.Username.String()).Err(err).Msg("Failed to hash user password")
+			log.Debug().Str("username", *body.Username).Err(err).Msg("Failed to hash user password")
 			return httperrors.ErrBadRequestInvalidPassword
 		}
 
@@ -57,7 +58,7 @@ func postRegisterHandler(s *api.Server) echo.HandlerFunc {
 
 		if err := db.WithTransaction(ctx, s.DB, func(tx boil.ContextExecutor) error {
 			user := &models.User{
-				Username:            null.StringFrom(body.Username.String()),
+				Username:            null.StringFrom(*body.Username),
 				Password:            null.StringFrom(hash),
 				LastAuthenticatedAt: null.TimeFrom(time.Now()),
 				IsActive:            true,
